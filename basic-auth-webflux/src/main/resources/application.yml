@@ -1,0 +1,17 @@
+#server.port=8080
+# spring.datasource.x
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/auth
+    username: root
+    password:
+  jpa:
+    show-sql: true
+    open-in-view: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+  devtools:
+    restart:
+      exclude: static/**,public/**

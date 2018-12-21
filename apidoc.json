@@ -1,0 +1,19 @@
+{
+  "name": "统一认证",
+  "version": "0.0.1",
+  "description": "统一认证APi接口",
+  "title": "统一认证APi接口",
+  "url": "https://api.mvwchina.com/basic-auth",
+  "header": {
+    "title": "首页",
+    "filename": "header.md"
+  },
+  "footer": {
+    "title": "帮助",
+    "filename": "footer.md"
+  },
+  "template": {
+    "withCompare": true,
+    "withGenerator": true
+  }
+}

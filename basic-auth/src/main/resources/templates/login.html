@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="shortcut icon" href="/static/img/logo.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<!--[if lte IE 9]>
+<p class="browserupgrade">
+    监测到您正在使用<strong>过时的</strong> 浏览器. 请 <a href="https://browsehappy.com/">更新您的浏览器</a> 来提高您的体验和安全
+</p>
+<![endif]-->
+<header class="mvw-header p-3">
+    <img src="/static/img/logo.png" class="img-fluid">
+</header>
+<div class="mvw-main">
+    <section class="container py-5">
+        <div class="row justify-content-around">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
+                <div class="bg-light rounded container">
+                    <div class="row">
+                        <div href="#tab1" class="col-6 text-center py-3">
+                            密码登录
+                        </div>
+                        <div href="#tab2" class="col-6 text-center py-3" style="background-color: gray;">
+                            快捷登录
+                        </div>
+                    </div>
+                    <div class="tabbar-content pb-3">
+                        <div id="tab1" class="collapse show">
+                            <form action="/login" method="post">
+                                <div class="form-group">
+                                    <div>
+                                        <span>医视账号</span>
+                                        <input
+                                                class="form-control"
+                                                name="account"
+                                                aria-describedby="emailHelp"
+                                                placeholder="请输入手机号/用户名/邮箱/证件号">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        <span>密码</span>
+                                        <input type="password"
+                                               class="form-control"
+                                               name="password"
+                                               placeholder="请输入密码">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-lg btn-block">登录</button>
+                            </form>
+                        </div>
+                        <div id="tab2" class="collapse">
+                            <form>
+                                <div class="form-group">
+                                    <label>医视账号
+                                        <input type="email" class="form-control" id="exampleInputEmail1"
+                                               aria-describedby="emailHelp"
+                                               placeholder="请输入手机号/用户名/邮箱/证件号">
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label>Password
+                                        <input type="password" class="form-control" id="exampleInputPassword1"
+                                               placeholder="Password">
+                                    </label>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-none d-lg-block col-lg-6">
+                <img src="/static/img/column_1.png" class="img-fluid">
+                <div class="row py-3">
+                    <div class="col-3 text-center">
+                        <a href="http://www.imed.org.cn/chan.html" target="_blank">
+                            <img src="/static/img/pro_20600.png" class="img-fluid">
+                            <span class="text-light">国家医学电子书包</span>
+                        </a>
+                    </div>
+                </div>
+                <img src="/static/img/column_2.png" class="img-fluid">
+                <div class="row pt-3">
+                    <div class="col-3 my-2 text-center">
+                        <a href="http://online.thesurgery.cn/" target="_blank">
+                            <img src="/static/img/pro_20200.png" class="img-fluid">
+                            <span class="text-light">手术在线</span>
+                        </a>
+                    </div>
+                    <div class="col-3 my-2 text-center">
+                        <a href="http://tcm.ccgme-cmda.cn" target="_blank">
+                            <img src="/static/img/pro_20500.png" class="img-fluid">
+                            <span class="text-light">中医住培管理</span>
+                        </a>
+                    </div>
+                    <div class="col-3 my-2 text-center">
+                        <a href="http://exam.mvwchina.com/pc/student/login.html" target="_blank">
+                            <img src="/static/img/pro_20300.png" class="img-fluid">
+                            <span class="text-light">医视考试系统</span>
+                        </a>
+                    </div>
+                    <div class="col-3 my-2 text-center">
+                        <a href="http://www.imed.org.cn/ " target="_blank">
+                            <img src="/static/img/pro_20100.png" class="img-fluid">
+                            <span class="text-light">三基学习系统</span>
+                        </a>
+                    </div>
+                    <div class="col-3 my-2 text-center">
+                        <img src="/static/img/pro_21000.png" class="img-fluid">
+                        <span class="text-light">360评估系统</span>
+                    </div>
+                    <div class="col-3 my-2 text-center">
+                        <img src="/static/img/xyzhp.png" class="img-fluid">
+                        <span class="text-light">西医住培</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<section>
+    <img src="/static/img/fwljPic2017.png" class="d-none d-md-block w-100">
+    <img src="/static/img/contactPic2017.png" class="w-100">
+</section>
+
+<footer class="bg-dark p-3" role="contentinfo">
+    <div class="row justify-content-center">
+        <div class="col-lg-12 col-xl-10 row">
+            <div class="col-lg-2 d-none d-lg-block">
+                <a href="/" data-ga-click="Footer, go to home, text:home"
+                   class="text-gray-dark"
+                   aria-label="Go to MVWCHINA homepage">
+                    <img src="/static/img/mvwPic.png" class="img-fluid">
+                </a>
+            </div>
+            <div class="col-6 col-sm-3 col-lg-2">
+                <h5 class="text-white">认识医视界</h5>
+                <ul class="list-unstyled">
+                    <li>
+                        <a href="https://www.mvwchina.com/index/article.jhtml?action=queryagain&amp;name=aboutUs"
+                           data-ga-click="Footer, go to 关于我们, text:关于我们"
+                           target="_blank"
+                           class="link-gray">
+                            <span class="text-muted">关于我们</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.mvwchina.com/index/article.jhtml?action=queryagain&amp;name=newsInformation"
+                           data-ga-click="Footer, go to 新闻资讯, text:新闻资讯"
+                           target="_blank"
+                           class="link-gray">
+                            <span class="text-muted">新闻资讯</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.mvwchina.com/index/article.jhtml?action=queryagain&amp;name=mediaCoverage"
+                           data-ga-click="Footer, go to 媒体报道, text:媒体报道"
+                           target="_blank"
+                           class="link-gray">
+                            <span class="text-muted">媒体报道</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-6 col-sm-3 col-lg-2">
+                <h5 class="text-white">加入医视界</h5>
+                <ul class="list-unstyled">
+                    <li>
+                        <a href="https://www.mvwchina.com/index/article.jhtml?action=queryagain&amp;name=employingPeople"
+                           target="_blank"
+                           data-ga-click="Footer, go to api, text:api" class="link-gray">
+                            <span class="text-muted">用人理念</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.mvwchina.com/index/article.jhtml?action=queryagain&amp;name=compensationBenefits"
+                           target="_blank"
+                           data-ga-click="Footer, go to partner, text:partner"
+                           class="link-gray">
+                            <span class="text-muted">薪酬福利</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.mvwchina.com/index/article.jhtml?action=queryagain&amp;name=positionPromotion"
+                           data-ga-click="Footer, go to atom, text:atom" class="link-gray ">
+                            <span class="text-muted">职位晋升</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-4">
+                <h5 class="text-white">贯穿医学教育全程一体化医学教育平台</h5>
+                <ul class="list-unstyled">
+                    <li class="text-muted">官方网站：www.mvwchina.com</li>
+                    <li class="d-flex">
+                        <div class="text-muted">客服电话：</div>
+                        <div>
+                            <div class="text-muted">400-001-8080</div>
+                            <div class="text-muted">010-84280076</div>
+                        </div>
+                    </li>
+                    <li class="text-muted">办公地址：北京市朝阳区芍药居38号楼3层</li>
+                </ul>
+            </div>
+            <div class="col-lg-2 d-none d-lg-block">
+                <div>
+                    <a href="/" data-ga-click="Footer, go to home, text:home"
+                       class="text-gray-dark"
+                       aria-label="Go to MVWCHINA homepage">
+                        <img src="/static/img/qrCode.jpg" class="img-fluid">
+                    </a>
+                </div>
+                <div class="text-muted">扫一扫关注医视界</div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-12 col-xl-10 row">
+            <span class="text-secondary">医视界版权所有&nbsp;京ICP备13033683号</span>
+        </div>
+    </div>
+</footer>
+
+<script src="/static/js/plugins.js"></script>
+<script src="/static/js/vendor/modernizr-3.6.0.min.js"></script>
+<script src="/static/js/main.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.min.js"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script>window.jQuery || document.write('<script src="/static/js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
+</body>
+</html>
