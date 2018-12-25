@@ -39,7 +39,11 @@ public class TokenFilterConfig implements Filter {
         HttpServletRequest servletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-        if (servletRequest.getServletPath().matches("/login")) {
+        String servletPath = servletRequest.getServletPath();
+
+        if (servletPath.matches("/") ||
+                servletPath.matches("/static/.*") ||
+                servletPath.matches("/(login|(index\\.html))")) {
             chain.doFilter(request, response);
             return;
         }
@@ -48,10 +52,12 @@ public class TokenFilterConfig implements Filter {
 
         String userID = Optional.ofNullable(authInfo.get("X-MVW-userID")).orElse(servletRequest.getHeader("X-MVW-userID"));
         String accessKey = Optional.ofNullable(authInfo.get("access-key")).orElse(servletRequest.getHeader("access-key"));
-        String device = Optional.ofNullable(servletRequest.getHeader("device-type")).orElse("PC");
+        String device = Optional.ofNullable(authInfo.get("device-type")).orElse(servletRequest.getHeader("device-type"));
 
-        System.out.println(new Date().getTime());
-        System.out.println(((ArrayList) redisTemplate.boundHashOps(userID).get(device)).get(3));
+        if (Objects.isNull(device) || device.isEmpty()) {
+            device = "PC";
+        }
+
 
         boolean status = !Objects.isNull(userID) &&
                 redisTemplate.hasKey(userID) &&
@@ -68,6 +74,8 @@ public class TokenFilterConfig implements Filter {
         if (status) {
             chain.doFilter(request, response);
         } else {
+//            ((HttpServletRequest) request).getRequestURI();//附加请求地址
+
             httpServletResponse.sendRedirect("/login");
         }
 

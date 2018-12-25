@@ -2,12 +2,15 @@ package com.mvwchina.funcation.basicauth.controller;
 
 import com.mvwchina.funcation.basicauth.vo.ValidateVO;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Name:
@@ -19,7 +22,7 @@ import javax.annotation.Resource;
  * @version 1.0
  * @since 2018/11/2 下午3:02
  */
-@RestController
+@Controller
 public class ValidateController {
 
     @Resource
@@ -46,8 +49,30 @@ public class ValidateController {
      * "status": true
      * }
      */
+    @ResponseBody
     @GetMapping("validate")
     public ValidateVO handle(@RequestAttribute("x-mvw-validate") boolean status) {
         return new ValidateVO(status);
+    }
+
+    @GetMapping("logout")
+    public String logout(@CookieValue("X-MVW-userID") String userID,
+                         @CookieValue(value = "device-type", defaultValue = "PC") String deviceType,
+                         HttpServletResponse response) {
+
+        //删除Cookie
+        Cookie userIdCookie = new Cookie("X-MVW-userID", null);
+        userIdCookie.setMaxAge(0);
+        response.addCookie(userIdCookie);
+        Cookie tokenCookie = new Cookie("access-key", null);
+        tokenCookie.setMaxAge(0);
+        response.addCookie(tokenCookie);
+        /* set Cookie end */
+
+        /* set redis start */
+        redisTemplate.boundHashOps(userID).delete(deviceType);
+        /* set redis start */
+        return "redirect:/login";
+
     }
 }

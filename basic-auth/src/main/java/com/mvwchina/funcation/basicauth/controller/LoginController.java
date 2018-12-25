@@ -156,6 +156,10 @@ public class LoginController {
         Cookie tokenCookie = new Cookie("access-key", token);
         tokenCookie.setMaxAge(tokenAlive * 24 * 3600);
         response.addCookie(tokenCookie);
+
+        Cookie deviceCookie = new Cookie("device-type", deviceEnum.name());
+        tokenCookie.setMaxAge(tokenAlive * 24 * 3600);
+        response.addCookie(deviceCookie);
         /* set Cookie end */
 
         /* set redis start */
