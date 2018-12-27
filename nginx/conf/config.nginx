@@ -1,7 +1,7 @@
 #user  nobody;
 worker_processes  1;
 
-#error_log  logs/error.log;
+error_log  logs/error.log debug;
 #error_log  logs/error.log  notice;
 #error_log  logs/error.log  info;
 
@@ -12,7 +12,6 @@ events {
     worker_connections  1024;
 }
 
-
 http {
     include       mime.types;
     default_type  application/octet-stream;
@@ -21,7 +20,7 @@ http {
     #                  '$status $body_bytes_sent "$http_referer" '
     #                  '"$http_user_agent" "$http_x_forwarded_for"';
 
-    #access_log  logs/access.log  main;
+    access_log  logs/access.log;
 
     sendfile        on;
     #tcp_nopush     on;
@@ -32,6 +31,7 @@ http {
     #gzip  on;
 
     server {
+
         listen       8080;
         server_name  localhost;
 
@@ -39,7 +39,13 @@ http {
 
         #access_log  logs/host.access.log  main;
 
+        #        location / {
+        #            root   html;
+        #            index  index.html index.htm;
+        #        }
+
         location / {
+            default_type text/html;
             root   html;
             index  index.html index.htm;
         }
@@ -113,5 +119,9 @@ http {
     #        index  index.html index.htm;
     #    }
     #}
+
+    include filter.nginx;
+    #    include proxy.nginx;
+    #    include redis.nginx;
 
 }

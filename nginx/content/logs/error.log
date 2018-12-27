@@ -1,0 +1,69 @@
+2018/12/25 14:49:02 [notice] 2111#142608: using the "kqueue" event method
+2018/12/25 14:49:02 [notice] 2111#142608: start worker processes
+2018/12/25 14:49:02 [notice] 2111#142608: start worker process 2496
+2018/12/25 14:49:02 [notice] 2111#142608: signal 23 (SIGIO) received
+2018/12/25 14:49:02 [notice] 2111#142608: signal 23 (SIGIO) received
+2018/12/25 14:49:03 [notice] 2111#142608: signal 20 (SIGCHLD) received from 2467
+2018/12/25 14:49:03 [notice] 2111#142608: worker process 2467 exited with code 0
+2018/12/25 14:49:03 [notice] 2111#142608: signal 23 (SIGIO) received
+2018/12/25 14:49:03 [notice] 2111#142608: signal 23 (SIGIO) received from 2496
+2018/12/25 14:49:03 [debug] 2496#181703: *65 [lua] http.lua:635: send_request(): 
+GET /validate HTTP/1.1
+User-Agent: lua-resty-http/0.12 (Lua) ngx_lua/10013
+Cookie: device-type=PC; X-MVW-userID=adcefafd-fb6d-4c22-8900-d2e47175c908; access-key=9e829aa9fc43f376aa8d69f7a55915fd
+Host: 127.0.0.1:8080
+
+
+2018/12/25 14:49:03 [notice] 2496#181703: *65 [lua] access_rest.lua:34: true, client: 127.0.0.1, server: 127.0.0.1, request: "GET /test.html HTTP/1.1", host: "127.0.0.1:8080", referrer: "http://127.0.0.1:8080/login?redirect_uri=http%3A%2F%2F127.0.0.1%3A8080%2Ftest.html"
+2018/12/25 14:49:03 [info] 2496#181703: *68 kevent() reported that client 127.0.0.1 closed keepalive connection
+2018/12/25 14:49:59 [info] 2496#181703: *66 client closed connection while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8080
+2018/12/25 14:49:59 [debug] 2496#181703: *65 [lua] http.lua:635: send_request(): 
+GET /validate HTTP/1.1
+User-Agent: lua-resty-http/0.12 (Lua) ngx_lua/10013
+Cookie: device-type=PC; X-MVW-userID=adcefafd-fb6d-4c22-8900-d2e47175c908; access-key=9e829aa9fc43f376aa8d69f7a55915fd
+Host: 127.0.0.1:8080
+
+
+2018/12/25 14:49:59 [notice] 2496#181703: *65 [lua] access_rest.lua:34: true, client: 127.0.0.1, server: 127.0.0.1, request: "GET /test.html HTTP/1.1", host: "127.0.0.1:8080", referrer: "http://127.0.0.1:8080/login?redirect_uri=http%3A%2F%2F127.0.0.1%3A8080%2Ftest.html"
+2018/12/25 14:49:59 [info] 2496#181703: *73 kevent() reported that client 127.0.0.1 closed keepalive connection
+2018/12/25 14:50:10 [info] 2496#181703: *71 client closed connection while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8080
+2018/12/25 14:50:15 [notice] 2496#181703: *65 [lua] access_redis.lua:11: {"X-MVW-userID":"adcefafd-fb6d-4c22-8900-d2e47175c908","access-key":"9e829aa9fc43f376aa8d69f7a55915fd","device-type":"PC"}, client: 127.0.0.1, server: 127.0.0.1, request: "GET /home HTTP/1.1", host: "127.0.0.1:8080"
+2018/12/25 14:50:15 [notice] 2496#181703: *65 [lua] access_redis.lua:12: adcefafd-fb6d-4c22-8900-d2e47175c908, client: 127.0.0.1, server: 127.0.0.1, request: "GET /home HTTP/1.1", host: "127.0.0.1:8080"
+2018/12/25 14:50:15 [notice] 2496#181703: *65 [lua] access_redis.lua:13: 9e829aa9fc43f376aa8d69f7a55915fd, client: 127.0.0.1, server: 127.0.0.1, request: "GET /home HTTP/1.1", host: "127.0.0.1:8080"
+2018/12/25 14:51:15 [info] 2496#181703: *76 client timed out (60: Operation timed out) while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8080
+2018/12/25 14:51:43 [debug] 2496#181703: *82 [lua] http.lua:635: send_request(): 
+GET /validate HTTP/1.1
+User-Agent: lua-resty-http/0.12 (Lua) ngx_lua/10013
+Cookie: device-type=PC
+Host: 127.0.0.1:8080
+
+
+2018/12/25 14:51:43 [notice] 2496#181703: *82 [lua] access_rest.lua:34: false, client: 127.0.0.1, server: 127.0.0.1, request: "GET /test.html HTTP/1.1", host: "127.0.0.1:8080"
+2018/12/25 14:51:43 [info] 2496#181703: *85 kevent() reported that client 127.0.0.1 closed keepalive connection
+2018/12/25 14:51:53 [debug] 2496#181703: *92 [lua] http.lua:635: send_request(): 
+GET /validate HTTP/1.1
+User-Agent: lua-resty-http/0.12 (Lua) ngx_lua/10013
+Cookie: device-type=PC
+Host: 127.0.0.1:8080
+
+
+2018/12/25 14:51:53 [notice] 2496#181703: *92 [lua] access_rest.lua:34: false, client: 127.0.0.1, server: 127.0.0.1, request: "GET /test.html HTTP/1.1", host: "127.0.0.1:8080"
+2018/12/25 14:51:54 [info] 2496#181703: *112 kevent() reported that client 127.0.0.1 closed keepalive connection
+2018/12/25 14:52:02 [debug] 2496#181703: *92 [lua] http.lua:635: send_request(): 
+GET /validate HTTP/1.1
+User-Agent: lua-resty-http/0.12 (Lua) ngx_lua/10013
+Cookie: device-type=PC; X-MVW-userID=adcefafd-fb6d-4c22-8900-d2e47175c908; access-key=c57356a73000a150f1b1f2a33cee1c70
+Host: 127.0.0.1:8080
+
+
+2018/12/25 14:52:02 [notice] 2496#181703: *92 [lua] access_rest.lua:34: true, client: 127.0.0.1, server: 127.0.0.1, request: "GET /test.html HTTP/1.1", host: "127.0.0.1:8080", referrer: "http://127.0.0.1:8080/login?redirect_uri=http%3A%2F%2F127.0.0.1%3A8080%2Ftest.html"
+2018/12/25 14:52:02 [info] 2496#181703: *117 kevent() reported that client 127.0.0.1 closed keepalive connection
+2018/12/25 14:52:02 [error] 2496#181703: *92 open() "/Users/lujiewen/IdeaProjects/uums/nginx/content/html/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: 127.0.0.1, request: "GET /favicon.ico HTTP/1.1", host: "127.0.0.1:8080", referrer: "http://127.0.0.1:8080/test.html"
+2018/12/25 15:22:31 [notice] 2111#142608: signal 3 (SIGQUIT) received from 2713, shutting down
+2018/12/25 15:22:31 [notice] 2496#181703: gracefully shutting down
+2018/12/25 15:22:31 [notice] 2111#142608: signal 23 (SIGIO) received from 2496
+2018/12/25 15:22:31 [notice] 2496#181703: exiting
+2018/12/25 15:22:31 [notice] 2496#181703: exit
+2018/12/25 15:22:31 [notice] 2111#142608: signal 20 (SIGCHLD) received from 2496
+2018/12/25 15:22:31 [notice] 2111#142608: worker process 2496 exited with code 0
+2018/12/25 15:22:31 [notice] 2111#142608: exit

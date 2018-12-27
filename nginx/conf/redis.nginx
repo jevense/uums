@@ -1,0 +1,39 @@
+server {
+    listen       8080;
+    server_name  192.168.8.144;
+    #    server_name  192.168.1.100;
+
+    root html;
+    index index.html index.htm;
+
+    location /{
+        set $redis_key $uri;
+
+        default_type text/html;
+        redis_pass 127.0.0.1:6379;
+        error_page 404 = @fetch;
+    }
+
+    location @fetch{
+        root html;
+    }
+
+    location /test{
+        default_type text/html;
+        content_by_lua_file ../lua/resty-redis.lua;
+    }
+
+    #    location /get{
+    #        set_unescape_uri $key $arg_key;
+    #        redis2_query get $key;
+    #        redis_pass 127.0.0.1:6379;
+    #    }
+    #
+#    location /set{
+    #        set_unescape_uri $key $arg_key;
+    #        set_unescape_uri $val $arg_val;
+    #        redis2_query set $key $val;
+    #        redis_pass 127.0.0.1:6379;
+    #    }
+
+}
