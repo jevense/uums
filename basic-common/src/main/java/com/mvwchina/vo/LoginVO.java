@@ -1,9 +1,10 @@
-package com.mvwchina.funcation.basicauth.vo;
+package com.mvwchina.vo;
 
 import com.mvwchina.enumeration.DeviceEnum;
 import com.mvwchina.enumeration.LoginTypeEnum;
 import com.mvwchina.enumeration.OSEnum;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,7 @@ import javax.validation.constraints.NotNull;
  * @since 2018/12/21 上午12:36
  */
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginVO {
@@ -38,5 +40,12 @@ public class LoginVO {
     private DeviceEnum deviceEnum;
 
     private OSEnum osEnum;
+
+    public LoginVO(String account, String password) {
+        this.account = account;
+        this.password = password;
+    }
+
+
 
 }

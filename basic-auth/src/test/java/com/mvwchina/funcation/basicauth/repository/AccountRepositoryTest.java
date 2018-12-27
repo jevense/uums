@@ -1,7 +1,7 @@
 package com.mvwchina.funcation.basicauth.repository;
 
 import com.mvwchina.funcation.basicauth.domain.Account;
-import com.mvwchina.funcation.basicauth.util.MD5;
+import com.mvwchina.util.MD5;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

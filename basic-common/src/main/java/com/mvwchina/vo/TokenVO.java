@@ -1,6 +1,12 @@
-package com.mvwchina.funcation.basicauth.vo;
+package com.mvwchina.vo;
 
+import lombok.Builder;
 import lombok.Data;
+
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Name:
@@ -12,6 +18,7 @@ import lombok.Data;
  * @version 1.0
  * @since 2018/12/19 下午2:32
  */
+@Builder
 @Data
 public class TokenVO {
 
@@ -21,5 +28,9 @@ public class TokenVO {
 
     private String token;
 
-    private String expiresIn;
+    private int expiresIn;
+
+    private String device;
+
+    private String reason;
 }

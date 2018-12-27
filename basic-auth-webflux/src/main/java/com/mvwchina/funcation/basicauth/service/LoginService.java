@@ -1,7 +1,7 @@
 package com.mvwchina.funcation.basicauth.service;
 
 import com.mvwchina.funcation.basicauth.domain.Account;
-import com.mvwchina.funcation.basicauth.repository.AccountRepository;
+import com.mvwchina.funcation.basicauth.repository.LoginRepository;
 import com.mvwchina.util.MD5;
 import com.mvwchina.vo.LoginVO;
 import org.springframework.stereotype.Service;
@@ -20,10 +20,10 @@ import java.util.Optional;
  * @since 2018/12/21 上午1:03
  */
 @Service
-public class AccountService {
+public class LoginService {
 
     @Resource
-    private AccountRepository accountRepository;
+    private LoginRepository accountRepository;
 
     public Optional<Account> findByPhone(String phone) {
         return accountRepository.findOne((root, query, cb) -> cb.and(
@@ -34,8 +34,8 @@ public class AccountService {
     }
 
     public boolean auth(LoginVO loginVO, Account account) {
-        String password = MD5.encode(MD5.encode(loginVO.getPassword(), ""), account.getUseId());
-        return password.equals(account.getPassword());
+        return MD5.encode(MD5.encode(loginVO.getPassword(), ""), account.getUseId())
+                .equals(account.getPassword());
     }
 
 

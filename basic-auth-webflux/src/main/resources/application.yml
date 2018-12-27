@@ -15,3 +15,5 @@ spring:
   devtools:
     restart:
       exclude: static/**,public/**
+  webflux:
+    static-path-pattern: /static/**

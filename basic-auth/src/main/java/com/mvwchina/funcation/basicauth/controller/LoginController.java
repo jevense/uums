@@ -5,9 +5,9 @@ import com.mvwchina.enumeration.DeviceEnum;
 import com.mvwchina.enumeration.LoginTypeEnum;
 import com.mvwchina.funcation.basicauth.domain.Account;
 import com.mvwchina.funcation.basicauth.service.AccountService;
-import com.mvwchina.funcation.basicauth.util.MD5;
-import com.mvwchina.funcation.basicauth.vo.LoginVO;
-import com.mvwchina.funcation.basicauth.vo.TokenVO;
+import com.mvwchina.util.MD5;
+import com.mvwchina.vo.LoginVO;
+import com.mvwchina.vo.TokenVO;
 import com.mvwchina.util.URLDecoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -117,7 +117,7 @@ public class LoginController {
     @ResponseBody
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public TokenVO loginHandle(@RequestBody LoginVO loginVO) {
-        return new TokenVO();
+        return TokenVO.builder().build();
     }
 
     @PostMapping(produces = "text/html;charset=utf-8")
@@ -166,7 +166,7 @@ public class LoginController {
         //[token,deviceid,appid,expire]
         List tokenResult = Lists.newArrayList(token, loginVO.getDeviceEnum(), loginVO.getAppId(), expireDate);
         redisTemplate.opsForHash().put(accountOptional.get().getUseId(), loginVO.getDeviceEnum().name(), tokenResult);
-        /* set redis start */
+        /* set redis end */
 
         return "redirect:" + URLDecoder.decode(redirectUri, "home");
     }

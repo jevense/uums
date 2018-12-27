@@ -1,4 +1,4 @@
-package com.mvwchina.funcation.basicauth.vo;
+package com.mvwchina.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

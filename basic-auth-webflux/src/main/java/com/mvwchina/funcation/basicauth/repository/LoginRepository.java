@@ -2,6 +2,7 @@ package com.mvwchina.funcation.basicauth.repository;
 
 import com.mvwchina.funcation.basicauth.domain.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * Name:
@@ -13,6 +14,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @version 1.0
  * @since 2018/11/2 下午2:45
  */
-public interface LoginRepository extends JpaRepository<Account, String> {
+public interface LoginRepository extends JpaRepository<Account, String>, JpaSpecificationExecutor<Account> {
 
 }

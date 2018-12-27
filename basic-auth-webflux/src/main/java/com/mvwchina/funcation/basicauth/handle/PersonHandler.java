@@ -2,11 +2,11 @@ package com.mvwchina.funcation.basicauth.handle;
 
 import com.mvwchina.funcation.basicauth.domain.Person;
 import com.mvwchina.funcation.basicauth.repository.PersonRepository;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -34,18 +34,18 @@ public class PersonHandler {
     }
 
     public Mono<ServerResponse> listPeople(ServerRequest request) {
-        Flux<Person> people = repository.allPeople();
+        val people = repository.allPeople();
         return ok().contentType(APPLICATION_JSON).body(people, Person.class);
     }
 
     public Mono<ServerResponse> createPerson(ServerRequest request) {
-        Mono<Person> person = request.bodyToMono(Person.class);
+        val person = request.bodyToMono(Person.class);
         person.subscribe(System.out::println);
         return ok().build(repository.savePerson(person));
     }
 
     public Mono<ServerResponse> getPerson(ServerRequest request) {
-        int personId = Integer.valueOf(request.pathVariable("id"));
+        val personId = Integer.valueOf(request.pathVariable("id"));
         return repository.getPerson(personId)
                 .flatMap(person -> ok().contentType(APPLICATION_JSON).body(fromObject(person)))
                 .switchIfEmpty(ServerResponse.notFound().build());

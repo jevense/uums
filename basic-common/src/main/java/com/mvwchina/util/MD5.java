@@ -1,4 +1,4 @@
-package com.mvwchina.funcation.basicauth.util;
+package com.mvwchina.util;
 
 import org.springframework.util.DigestUtils;
 

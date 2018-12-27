@@ -1,5 +1,6 @@
 package com.mvwchina.util;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.UnsupportedEncodingException;
@@ -18,21 +19,13 @@ import java.util.Objects;
 @Slf4j
 public class URLDecoder {
 
+    @SneakyThrows(UnsupportedEncodingException.class)
     public static String decode(String string) {
-        try {
-            return java.net.URLDecoder.decode(string, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        return java.net.URLDecoder.decode(string, "UTF-8");
     }
 
     public static String decode(String string, String defaultValue) {
         if (Objects.isNull(string)) return defaultValue;
-        try {
-            return java.net.URLDecoder.decode(string, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            log.info("url异常", e);
-            return defaultValue;
-        }
+        return decode(string);
     }
 }

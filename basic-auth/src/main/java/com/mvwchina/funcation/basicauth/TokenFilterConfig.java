@@ -1,8 +1,11 @@
 package com.mvwchina.funcation.basicauth;
 
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Resource;
 import javax.servlet.*;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
  * @version 1.0
  * @since 2018/12/21 下午1:02
  */
+@Slf4j
 @Order(1)
 @WebFilter(filterName = "tokenFilter", urlPatterns = "/*")
 @Component
@@ -37,7 +41,7 @@ public class TokenFilterConfig implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         HttpServletRequest servletRequest = (HttpServletRequest) request;
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+        HttpServletResponse servletResponse = (HttpServletResponse) response;
 
         String servletPath = servletRequest.getServletPath();
 
@@ -48,21 +52,31 @@ public class TokenFilterConfig implements Filter {
             return;
         }
 
-        Map<String, String> authInfo = Arrays.stream(Optional.ofNullable(servletRequest.getCookies()).orElse(new Cookie[]{})).collect(Collectors.toMap(Cookie::getName, Cookie::getValue));
+        Map<String, String> authInfo = Arrays
+                .stream(Optional
+                        .ofNullable(servletRequest.getCookies())
+                        .orElse(new Cookie[]{}))
+                .collect(Collectors.toMap(Cookie::getName, Cookie::getValue));
 
-        String userID = Optional.ofNullable(authInfo.get("X-MVW-userID")).orElse(servletRequest.getHeader("X-MVW-userID"));
-        String accessKey = Optional.ofNullable(authInfo.get("access-key")).orElse(servletRequest.getHeader("access-key"));
-        String device = Optional.ofNullable(authInfo.get("device-type")).orElse(servletRequest.getHeader("device-type"));
+        String userID = Optional
+                .ofNullable(authInfo.get("X-MVW-userID"))
+                .orElse(servletRequest.getHeader("X-MVW-userID"));
 
-        if (Objects.isNull(device) || device.isEmpty()) {
-            device = "PC";
-        }
+        String accessKey = Optional
+                .ofNullable(authInfo.get("access-key"))
+                .orElse(servletRequest.getHeader("access-key"));
+
+        String device = Optional
+                .ofNullable(authInfo.get("device-type"))
+                .orElse(Optional
+                        .ofNullable(servletRequest.getHeader("device-type"))
+                        .orElse("PC"));
 
 
-        boolean status = !Objects.isNull(userID) &&
+        boolean status = Objects.nonNull(userID) &&
                 redisTemplate.hasKey(userID) &&
                 redisTemplate.boundHashOps(userID).hasKey(device) &&
-                accessKey.equals(((ArrayList) redisTemplate.boundHashOps(userID).get(device)).get(0)) &&
+                ((ArrayList) redisTemplate.boundHashOps(userID).get(device)).get(0).equals(accessKey) &&
                 new Date().getTime() < (Long) ((ArrayList) redisTemplate.boundHashOps(userID).get(device)).get(3);
 
         if (servletRequest.getServletPath().matches("/validate")) {
@@ -73,12 +87,18 @@ public class TokenFilterConfig implements Filter {
 
         if (status) {
             chain.doFilter(request, response);
-        } else {
-//            ((HttpServletRequest) request).getRequestURI();//附加请求地址
-
-            httpServletResponse.sendRedirect("/login");
+            return;
         }
 
+        val redirectUri = servletRequest.getRequestURL();
+        if (Objects.nonNull(servletRequest.getQueryString())) {
+            redirectUri.append("?").append(servletRequest.getQueryString());
+        }
 
+        val uriComponents = UriComponentsBuilder.fromPath("/login")
+                .queryParam("redirect_uri", "{redirect_uri}")
+                .build(redirectUri.toString());
+
+        servletResponse.sendRedirect(uriComponents.toString());
     }
 }

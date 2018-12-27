@@ -1,7 +1,7 @@
 package com.mvwchina.funcation.basicauth;
 
 import com.mvwchina.enumeration.DeviceEnum;
-import com.mvwchina.funcation.basicauth.util.MD5;
+import com.mvwchina.util.MD5;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
