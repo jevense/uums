@@ -1,5 +1,6 @@
 package com.mvwchina.funcation.basicauth;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
@@ -21,7 +22,10 @@ public class AppConfiguration {
     @Resource
     private Environment environment;
 
+    @Value("${http.port.defaultValue}")
+    private int port;
+
     public int httpPort() {
-        return environment.getProperty("http.port", Integer.class, 8081);
+        return environment.getProperty("http.port", Integer.class, port);
     }
 }

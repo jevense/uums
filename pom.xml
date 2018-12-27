@@ -62,6 +62,7 @@
         <module>basic-auth-webflux</module>
         <module>basic-common</module>
         <module>basic-auth</module>
+        <module>aspectj</module>
     </modules>
 
     <dependencies>

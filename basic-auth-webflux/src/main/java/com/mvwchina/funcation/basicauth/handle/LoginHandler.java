@@ -271,11 +271,7 @@ public class LoginHandler {
         return request
                 .attribute(MVW_VALIDATE_TOKEN)
                 .map(tokenVO -> ok().body(Mono.just((TokenVO) tokenVO), TokenVO.class))
-                .orElseGet(() -> ok()
-                        .body(Mono.just(TokenVO
-                                .builder()
-                                .status(false)
-                                .build()), TokenVO.class));
+                .orElseGet(() -> ok().body(Mono.just(TokenVO.builder().status(false).build()), TokenVO.class));
 
     }
 
