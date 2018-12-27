@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.mvwchina.foundation</groupId>
+    <artifactId>aspectj</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjtools</artifactId>
+            <version>1.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>1.11</version>
+                <configuration>
+                    <verbose>true</verbose>
+                    <privateScope>true</privateScope>
+                    <showWeaveInfo>true</showWeaveInfo>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <complianceLevel>1.8</complianceLevel>
+                    <!-- <encoding>UTF-8</encoding> -->
+                    <verbose>false</verbose>
+                    <outxml>true</outxml>
+                    <aspectLibraries>
+                        <!-- 此处定义外部的aspect包，例如spring的事务aspect包 。这里引用的包必须在依赖中声明 -->
+                        <!--
+                          <aspectLibrary>
+                             <groupId>org.springframework</groupId>
+                             <artifactId>spring-aspects</artifactId>
+                         </aspectLibrary>
+                        -->
+                    </aspectLibraries>
+                </configuration>
+                <!--<executions>-->
+                <!--<execution>-->
+                <!--<goals>-->
+                <!--<goal>compile</goal>       &lt;!&ndash; use this goal to weave all your main classes &ndash;&gt;-->
+                <!--<goal>test-compile</goal>  &lt;!&ndash; use this goal to weave all your test classes &ndash;&gt;-->
+                <!--</goals>-->
+                <!--</execution>-->
+                <!--</executions>-->
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>
