@@ -281,3 +281,8 @@ a:hover .text-muted {
 .mvw-main {
     background-image: url("/static/img/banner_bg.png");
 }
+
+.logout {
+    background-color: #2683EA;
+    border: 0;
+}

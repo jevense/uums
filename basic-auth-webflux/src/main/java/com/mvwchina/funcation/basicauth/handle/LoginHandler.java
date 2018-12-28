@@ -115,6 +115,23 @@ public class LoginHandler {
                         .build().toString());
     }
 
+    private ServerResponse.BodyBuilder clearCookieBodyBuilder() {
+
+        return getBodyBuilder()
+                .header("Set-Cookie", ResponseCookie
+                        .from(MVW_USER_ID, Optional.empty().toString())
+                        .maxAge(0)
+                        .build().toString())
+                .header("Set-Cookie", ResponseCookie
+                        .from(ACCESS_KEY, Optional.empty().toString())
+                        .maxAge(0)
+                        .build().toString())
+                .header("Set-Cookie", ResponseCookie
+                        .from(DEVICE_TYPE, Optional.empty().toString())
+                        .maxAge(0)
+                        .build().toString());
+    }
+
     /**
      * 登录认证过滤器
      *
@@ -362,6 +379,38 @@ public class LoginHandler {
         return ok().body(mono, ValidateVO.class);
 
 
+    }
+
+    public ServerRequest logout(ServerRequest request) {
+        val httpHeaders = request.headers().asHttpHeaders();
+
+        val userID = Optional
+                .ofNullable(request.cookies().getFirst(MVW_USER_ID))
+                .map(HttpCookie::getValue)
+                .orElse(httpHeaders.getFirst(MVW_USER_ID));
+
+        val device = Optional
+                .ofNullable(request.cookies().getFirst(DEVICE_TYPE))
+                .map(HttpCookie::getValue)
+                .orElse(Optional.ofNullable(httpHeaders.getFirst(DEVICE_TYPE)).orElse(DeviceEnum.PC.name()));
+
+        Optional.ofNullable(userID)
+                .map(redisTemplate::boundHashOps)
+                .ifPresent(hashOperations -> hashOperations.delete(device));
+
+        return request;
+    }
+
+    public Mono<ServerResponse> logoutPage(ServerRequest serverRequest) {
+        log.debug(serverRequest.methodName());
+        return clearCookieBodyBuilder().render("redirect:/login");
+
+
+    }
+
+    public Mono<ServerResponse> logoutData(ServerRequest serverRequest) {
+        log.debug(serverRequest.methodName());
+        return ok().body(Mono.just(ValidateVO.builder().status(true).build()), ValidateVO.class);
     }
 }
 

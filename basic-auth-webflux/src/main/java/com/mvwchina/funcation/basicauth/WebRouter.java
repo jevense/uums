@@ -56,6 +56,11 @@ public class WebRouter {
                         .POST("", loginHandler::login)
                         .before(loginHandler::auth)
                 )
+                .path("/logout", build -> build
+                        .DELETE("", contentType(MediaType.APPLICATION_JSON), loginHandler::logoutData)
+                        .DELETE("", loginHandler::logoutPage)
+                        .before(loginHandler::logout)
+                )
                 .build();
     }
 
