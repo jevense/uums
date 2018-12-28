@@ -333,6 +333,25 @@ public class LoginHandler {
      * 验证接口参数token是否正确
      *
      * @author lujiewen
+     * @api {get} /validate 验证令牌
+     * @apiName validate
+     * @apiVersion 0.0.1
+     * @apiGroup validate
+     * @apiExample {curl} 接口示例:
+     * curl -i https://api.mvwchina.com/basic-auth/validate
+     * @apiHeader {String} X-MVW-userID 请求头必须携带字段X-MVW-userID
+     * @apiHeader {String} access-key 请求头必须携带字段access-key
+     * @apiHeaderExample {json} 头部示例:
+     * {
+     * "X-MVW-userID": "用户ID",
+     * "access-key": "按照约定加密方式产生的token=="
+     * }
+     * @apiSuccess {Boolean} status 验证是否成功
+     * @apiSuccessExample {json} 响应示例:
+     * HTTP/1.1 200 OK
+     * {
+     * "status": true
+     * }
      * @since 2018/12/28
      */
     public Mono<ServerResponse> validate(ServerRequest serverRequest) {
