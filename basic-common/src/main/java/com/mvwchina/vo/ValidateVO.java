@@ -1,6 +1,7 @@
 package com.mvwchina.vo;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -14,7 +15,7 @@ import lombok.Data;
  * @since 2018/12/21 上午3:41
  */
 @Data
-@AllArgsConstructor
+@Builder
 public class ValidateVO {
 
     private boolean status;

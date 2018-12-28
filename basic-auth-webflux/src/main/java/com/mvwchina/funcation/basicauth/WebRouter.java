@@ -1,13 +1,11 @@
 package com.mvwchina.funcation.basicauth;
 
-import com.mvwchina.funcation.basicauth.handle.CityHandler;
 import com.mvwchina.funcation.basicauth.handle.LoginHandler;
 import com.mvwchina.funcation.basicauth.handle.PersonHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -36,20 +34,13 @@ public class WebRouter {
     public static final String X_MVW_USERID = "X-MVW-userID";
     public static final String ACCESS_KEY = "access-key";
     public static final String DEVICE_TYPE = "device-type";
+    public static final String X_MVW_VALIDATE_STATUS = "x-mvw-validate-status";
 
     private final PersonHandler personHandler;
 
-    private final LoginHandler loginHandler;
-
-    private final RedisTemplate<String, Object> redisTemplate;
-
     @Autowired
-    public WebRouter(PersonHandler personHandler,
-                     LoginHandler loginHandler,
-                     RedisTemplate<String, Object> redisTemplate) {
+    public WebRouter(PersonHandler personHandler) {
         this.personHandler = personHandler;
-        this.loginHandler = loginHandler;
-        this.redisTemplate = redisTemplate;
     }
 
     /**
@@ -60,7 +51,7 @@ public class WebRouter {
      * @since 2018/12/27
      */
     @Bean
-    public RouterFunction<ServerResponse> routeLogin() {
+    public RouterFunction<ServerResponse> routeLogin(LoginHandler loginHandler) {
 
         return route()
                 .GET("", loginHandler::indexPage)
@@ -74,13 +65,32 @@ public class WebRouter {
                 .build();
     }
 
+    /**
+     * 请求页面html
+     *
+     * @author lujiewen
+     * @since 2018/12/28
+     */
     @Bean
-    public RouterFunction<ServerResponse> routeBusiness(CityHandler cityHandler) {
+    public RouterFunction<ServerResponse> routePage(LoginHandler loginHandler) {
         return route()
-                .GET("/hello", cityHandler::helloCity)
-                .GET("/home", loginHandler::homePage)
-                .GET("/validate", loginHandler::validate)
                 .filter(loginHandler::filter)
+                .filter(loginHandler::redirect)
+                .GET("/home", loginHandler::homePage)
+                .build();
+    }
+
+    /**
+     * 请求JSON格式数据
+     *
+     * @author lujiewen
+     * @since 2018/12/28
+     */
+    @Bean
+    public RouterFunction<ServerResponse> routeData(LoginHandler loginHandler) {
+        return route()
+                .filter(loginHandler::filter)
+                .GET("/validate", loginHandler::validate)
                 .build();
     }
 

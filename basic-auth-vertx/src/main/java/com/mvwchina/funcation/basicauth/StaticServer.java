@@ -10,9 +10,8 @@ import io.vertx.ext.web.api.validation.HTTPRequestValidationHandler;
 import io.vertx.ext.web.api.validation.ParameterType;
 import io.vertx.ext.web.handler.*;
 import io.vertx.ext.web.sstore.LocalSessionStore;
-import io.vertx.ext.web.templ.TemplateEngine;
 import io.vertx.ext.web.templ.ThymeleafTemplateEngine;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.val;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -44,8 +43,7 @@ public class StaticServer extends AbstractVerticle {
                 .addFormParamWithPattern("formParameterName", "a{4}", true)
                 .addPathParam("pathParam", ParameterType.FLOAT);
 
-        TemplateEngine engine = ThymeleafTemplateEngine.create();
-        TemplateHandler handler = TemplateHandler.create(engine);
+        TemplateHandler handler = TemplateHandler.create(ThymeleafTemplateEngine.create());
 
         router.route()
                 .handler(StaticHandler.create())
@@ -63,10 +61,13 @@ public class StaticServer extends AbstractVerticle {
 
             Optional<Cookie> cookie = Optional.ofNullable(routingContext.getCookie("testCookie"));
 
-            String tar = "0";
-            if (cookie.isPresent() && cookie.get().getValue().matches("\\d+")) {
-                tar = String.valueOf(Integer.valueOf(cookie.get().getValue()) + 1);
-            }
+
+            val tar = cookie
+                    .filter(cook -> cook.getValue().matches("\\d+"))
+                    .map(cook -> String.valueOf(Integer.valueOf(cook.getValue()) + 1))
+                    .orElse("0");
+
+
             routingContext.addCookie(Cookie.cookie("testCookie", tar));
 
 

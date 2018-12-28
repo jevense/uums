@@ -8,6 +8,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Name:
@@ -23,11 +24,11 @@ import java.util.List;
 public class RedisConfig {
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
+    public RedisTemplate jsonRedisTemplate(RedisConnectionFactory factory) {
         return new JsonRedisTemplate(factory);
     }
 
-    class JsonRedisTemplate extends RedisTemplate<String, Object> {
+    class JsonRedisTemplate extends RedisTemplate<String, Map> {
 
         JsonRedisTemplate() {
             setKeySerializer(RedisSerializer.string());

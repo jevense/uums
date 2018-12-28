@@ -9,11 +9,13 @@ import com.mvwchina.util.URLDecoder;
 import com.mvwchina.vo.LoginVO;
 import com.mvwchina.vo.TokenVO;
 import com.mvwchina.vo.ValidateVO;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
@@ -26,7 +28,10 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.mvwchina.funcation.basicauth.WebRouter.*;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
@@ -40,8 +45,11 @@ import static org.springframework.web.reactive.function.server.ServerResponse.st
  *
  * @author lujiewen
  * @version 1.0
+ * @apiDefine ServerError
+ * @apiError (Error 5xx) 503 服务不可用
  * @since 2018/12/18 下午2:50
  */
+@Slf4j
 @Component
 public class LoginHandler {
 
@@ -52,17 +60,23 @@ public class LoginHandler {
 
     private final LoginService loginService;
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Map<String, List>> redisTemplate;
 
     @Autowired
     public LoginHandler(Define define,
                         LoginService loginService,
-                        RedisTemplate<String, Object> redisTemplate) {
+                        RedisTemplate<String, Map<String, List>> redisTemplate) {
         this.define = define;
         this.loginService = loginService;
         this.redisTemplate = redisTemplate;
     }
 
+    /**
+     * 页面请求正确，放回html类型数据的builder封装
+     *
+     * @author lujiewen
+     * @since 2018/12/28
+     */
     private ServerResponse.BodyBuilder getBodyBuilder() {
         return ok().contentType(MediaType.valueOf("text/html;charset=utf-8"));
     }
@@ -101,20 +115,21 @@ public class LoginHandler {
                         .build().toString());
     }
 
+    /**
+     * 登录认证过滤器
+     *
+     * @author lujiewen
+     * @since 2018/12/28
+     */
     public ServerRequest auth(ServerRequest request) {
         request.formData().subscribe(map -> {
             val tokenVO = loginService
                     .findByPhone(map.getFirst("account"))
+                    .filter(acc -> loginService.auth(LoginVO.builder()
+                            .account(map.getFirst("account"))
+                            .password(map.getFirst("password"))
+                            .build(), acc))
                     .map(acc -> {
-                        val loginVO = LoginVO.builder()
-                                .account(map.getFirst("account"))
-                                .password(map.getFirst("password"))
-                                .build();
-
-                        if (!loginService.auth(loginVO, acc)) {
-                            return TokenVO.builder().status(false).build();
-                        }
-
                         val device = Optional.ofNullable(map.getFirst("device"))
                                 .orElse(DeviceEnum.PC.name());
 
@@ -128,7 +143,7 @@ public class LoginHandler {
                         /* set redis start */
                         //[token,deviceid,appid,expire]
                         List tokenResult = Lists.newArrayList(token, DeviceEnum.valueOf(device), acc.getUseId(), expireDate);
-                        redisTemplate.opsForHash().put(acc.getUseId(), device, tokenResult);
+                        redisTemplate.<String, List>opsForHash().put(acc.getUseId(), device, tokenResult);
 
                         return TokenVO.builder()
                                 .status(true)
@@ -145,53 +160,90 @@ public class LoginHandler {
         return request;
     }
 
+    /**
+     * 项目页面认证过滤器
+     *
+     * @author lujiewen
+     * @since 2018/12/28
+     */
     public Mono<ServerResponse> filter(ServerRequest request, HandlerFunction<ServerResponse> next) {
         val httpHeaders = request.headers().asHttpHeaders();
-        val userIDCookie = request.cookies().getFirst(X_MVW_USERID);
-        val accessKeyCookie = request.cookies().getFirst(ACCESS_KEY);
-        val deviceTypeCookie = request.cookies().getFirst(DEVICE_TYPE);
 
-        val userID = Objects.nonNull(userIDCookie) ? userIDCookie.getValue() : httpHeaders.getFirst(X_MVW_USERID);
-        val accessKey = Objects.nonNull(accessKeyCookie) ? accessKeyCookie.getValue() : httpHeaders.getFirst(ACCESS_KEY);
-        val device = Optional.ofNullable(Objects.nonNull(deviceTypeCookie) ? deviceTypeCookie.getValue() : httpHeaders.getFirst(DEVICE_TYPE)).orElse("PC");
+        val userID = Optional
+                .ofNullable(request.cookies().getFirst(X_MVW_USERID))
+                .map(HttpCookie::getValue)
+                .orElse(httpHeaders.getFirst(X_MVW_USERID));
+        val accessKey = Optional
+                .ofNullable(request.cookies().getFirst(ACCESS_KEY))
+                .map(HttpCookie::getValue)
+                .orElse(httpHeaders.getFirst(ACCESS_KEY));
+        val device = Optional
+                .ofNullable(request.cookies().getFirst(DEVICE_TYPE))
+                .map(HttpCookie::getValue)
+                .orElse(Optional.ofNullable(httpHeaders.getFirst(DEVICE_TYPE)).orElse("PC"));
 
-        boolean status = Objects.nonNull(userID) &&
-                redisTemplate.hasKey(userID) &&
-                redisTemplate.boundHashOps(userID).hasKey(device) &&
-                ((ArrayList) redisTemplate.boundHashOps(userID).get(device)).get(0).equals(accessKey) &&
-                new Date().getTime() < (Long) ((ArrayList) redisTemplate.boundHashOps(userID).get(device)).get(3);
+        val status = Optional.ofNullable(userID)
+                .map(redisTemplate::<String, List>boundHashOps)
+                .map(hash -> hash.get(device))
+                .filter(list -> list.get(0).equals(accessKey))
+                .map(list -> (long) list.get(3) > new Date().getTime())
+                .orElse(false);
 
-        if (request.path().matches("/validate")) {
-            val nextRequest = ServerRequest.from(request);
-            nextRequest.attribute("x-mvw-validate", status);
-            return next.handle(nextRequest.build());
-        }
-
-        if (status) return next.handle(request);
-
-        val uriComponents = UriComponentsBuilder.fromPath("/login")
-                .queryParam("redirect_uri", "{redirect_uri}")
-                .build(request.uri().toString());
-
-        return ServerResponse.temporaryRedirect(uriComponents).build();
-    }
-
-    public Mono<ServerResponse> indexPage(ServerRequest serverRequest) {
-        return getBodyBuilder().syncBody(indexPage);
-    }
-
-    public Mono<ServerResponse> loginPage(ServerRequest serverRequest) {
-        return getBodyBuilder().render("login");
-    }
-
-    public Mono<ServerResponse> homePage(ServerRequest serverRequest) {
-        return getBodyBuilder().render("home");
+        request.attributes().put(X_MVW_VALIDATE_STATUS, status);
+        return next.handle(request);
     }
 
     /**
-     * @apiDefine ServerError
-     * @apiError (Error 5xx) 503 服务不可用
+     * 判断前置过滤器状态，决定是否重定向到登录页面
+     *
+     * @author lujiewen
+     * @since 2018/12/28
      */
+    public Mono<ServerResponse> redirect(ServerRequest request, HandlerFunction<ServerResponse> next) {
+        return request.attribute(X_MVW_VALIDATE_STATUS)
+                .filter(status -> (boolean) status)
+                .map(status -> next.handle(request))
+                .orElse(ServerResponse
+                        .temporaryRedirect(UriComponentsBuilder
+                                .fromPath("/login")
+                                .queryParam("redirect_uri", "{redirect_uri}")
+                                .build(request.uri().toString()))
+                        .build());
+    }
+
+    /**
+     * 项目首页（重定向到登录页面）
+     *
+     * @author lujiewen
+     * @since 2018/12/28
+     */
+    public Mono<ServerResponse> indexPage(ServerRequest serverRequest) {
+        log.debug(serverRequest.methodName());
+        return getBodyBuilder().syncBody(indexPage);
+    }
+
+    /**
+     * 登录页面
+     *
+     * @author lujiewen
+     * @since 2018/12/28
+     */
+    public Mono<ServerResponse> loginPage(ServerRequest serverRequest) {
+        log.debug(serverRequest.methodName());
+        return getBodyBuilder().render("login");
+    }
+
+    /**
+     * 登录完成首页
+     *
+     * @author lujiewen
+     * @since 2018/12/28
+     */
+    public Mono<ServerResponse> homePage(ServerRequest serverRequest) {
+        log.debug(serverRequest.methodName());
+        return getBodyBuilder().render("home");
+    }
+
     /**
      * @api {post} /login 登录
      * @apiName validate
@@ -249,35 +301,48 @@ public class LoginHandler {
     public Mono<ServerResponse> login(ServerRequest request) {
 
         return request.attribute(MVW_VALIDATE_TOKEN)
-                .map(tokenVO -> {
-                    val token = (TokenVO) tokenVO;
-                    if (!token.isStatus()) return status(HttpStatus.UNAUTHORIZED).render("login");
-                    val render = request
-                            .queryParam("redirect_uri")
-                            .map(redirectUri -> getCookieBodyBuilder(token)
-                                    .render("redirect:" + UriComponentsBuilder
-                                            .fromHttpUrl(URLDecoder.decode(redirectUri))
-                                            .build()
-                                            .toUri())
-                            )
-                            .orElseGet(() -> getCookieBodyBuilder(token).render("redirect:home"));
-
-                    return render;
-                })
+                .map(token -> (TokenVO) token)
+                .filter(TokenVO::isStatus)
+                .map(token -> request
+                        .queryParam("redirect_uri")
+                        .map(redirectUri -> getCookieBodyBuilder(token)
+                                .render("redirect:" + UriComponentsBuilder
+                                        .fromHttpUrl(URLDecoder.decode(redirectUri))
+                                        .build()
+                                        .toUri())
+                        )
+                        .orElseGet(() -> getCookieBodyBuilder(token).render("redirect:home")))
                 .orElseGet(() -> status(HttpStatus.UNAUTHORIZED).render("login"));
     }
 
+    /**
+     * 返回登录接口的数据
+     *
+     * @author lujiewen
+     * @since 2018/12/28
+     */
     public Mono<ServerResponse> token(ServerRequest request) {
         return request
                 .attribute(MVW_VALIDATE_TOKEN)
-                .map(tokenVO -> ok().body(Mono.just((TokenVO) tokenVO), TokenVO.class))
+                .map(token -> (TokenVO) token)
+                .map(tokenVO -> ok().body(Mono.just(tokenVO), TokenVO.class))
                 .orElseGet(() -> ok().body(Mono.just(TokenVO.builder().status(false).build()), TokenVO.class));
-
     }
 
+    /**
+     * 验证接口参数token是否正确
+     *
+     * @author lujiewen
+     * @since 2018/12/28
+     */
     public Mono<ServerResponse> validate(ServerRequest serverRequest) {
-        val status = (boolean) serverRequest.attribute("x-mvw-validate").orElse(false);
-        return ok().body(Mono.just(new ValidateVO(status)), ValidateVO.class);
+        val status = serverRequest.attribute("x-mvw-validate")
+                .map(flag -> (boolean) flag)
+                .orElse(false);
+        val mono = Mono.just(ValidateVO.builder().status(status).build());
+        return ok().body(mono, ValidateVO.class);
+
+
     }
 }
 
