@@ -30,12 +30,6 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Configuration
 public class WebRouter {
 
-    public static final String MVW_VALIDATE_TOKEN = "mvw-validate-token";
-    public static final String X_MVW_USERID = "X-MVW-userID";
-    public static final String ACCESS_KEY = "access-key";
-    public static final String DEVICE_TYPE = "device-type";
-    public static final String X_MVW_VALIDATE_STATUS = "x-mvw-validate-status";
-
     private final PersonHandler personHandler;
 
     @Autowired

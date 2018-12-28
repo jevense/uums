@@ -1,5 +1,6 @@
 package com.mvwchina.funcation.basicauth;
 
+import com.mvwchina.enumeration.DeviceEnum;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.core.annotation.Order;
@@ -59,28 +60,29 @@ public class TokenFilterConfig implements Filter {
                 .collect(Collectors.toMap(Cookie::getName, Cookie::getValue));
 
         String userID = Optional
-                .ofNullable(authInfo.get("X-MVW-userID"))
-                .orElse(servletRequest.getHeader("X-MVW-userID"));
+                .ofNullable(authInfo.get(PkgConst.X_MVW_USER_ID))
+                .orElse(servletRequest.getHeader(PkgConst.X_MVW_USER_ID));
 
         String accessKey = Optional
-                .ofNullable(authInfo.get("access-key"))
-                .orElse(servletRequest.getHeader("access-key"));
+                .ofNullable(authInfo.get(PkgConst.ACCESS_KEY))
+                .orElse(servletRequest.getHeader(PkgConst.ACCESS_KEY));
 
         String device = Optional
-                .ofNullable(authInfo.get("device-type"))
+                .ofNullable(authInfo.get(PkgConst.DEVICE_TYPE))
                 .orElse(Optional
-                        .ofNullable(servletRequest.getHeader("device-type"))
-                        .orElse("PC"));
+                        .ofNullable(servletRequest.getHeader(PkgConst.DEVICE_TYPE))
+                        .orElse(DeviceEnum.PC.name()));
 
 
-        boolean status = Objects.nonNull(userID) &&
-                redisTemplate.hasKey(userID) &&
-                redisTemplate.boundHashOps(userID).hasKey(device) &&
-                ((ArrayList) redisTemplate.boundHashOps(userID).get(device)).get(0).equals(accessKey) &&
-                new Date().getTime() < (Long) ((ArrayList) redisTemplate.boundHashOps(userID).get(device)).get(3);
+        boolean status = Optional.ofNullable(userID)
+                .map(redisTemplate::<String, List>boundHashOps)
+                .map(hash -> hash.get(device))
+                .filter(list -> list.get(0).equals(accessKey))
+                .map(list -> (long) list.get(3) > new Date().getTime())
+                .orElse(false);
 
         if (servletRequest.getServletPath().matches("/validate")) {
-            servletRequest.setAttribute("x-mvw-validate", status);
+            servletRequest.setAttribute(PkgConst.X_MVW_VALIDATE, status);
             chain.doFilter(request, response);
             return;
         }

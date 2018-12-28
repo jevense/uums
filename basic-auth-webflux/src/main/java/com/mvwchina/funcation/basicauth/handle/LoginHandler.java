@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.mvwchina.funcation.basicauth.WebRouter.*;
+import static com.mvwchina.funcation.basicauth.handle.PkgConst.*;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 import static org.springframework.web.reactive.function.server.ServerResponse.status;
 
@@ -102,7 +102,7 @@ public class LoginHandler {
 
         return getBodyBuilder()
                 .header("Set-Cookie", ResponseCookie
-                        .from(X_MVW_USERID, tokenVO.getUserID())
+                        .from(MVW_USER_ID, tokenVO.getUserID())
                         .maxAge(define.getTokenAlive() * 24 * 3600)
                         .build().toString())
                 .header("Set-Cookie", ResponseCookie
@@ -170,9 +170,9 @@ public class LoginHandler {
         val httpHeaders = request.headers().asHttpHeaders();
 
         val userID = Optional
-                .ofNullable(request.cookies().getFirst(X_MVW_USERID))
+                .ofNullable(request.cookies().getFirst(MVW_USER_ID))
                 .map(HttpCookie::getValue)
-                .orElse(httpHeaders.getFirst(X_MVW_USERID));
+                .orElse(httpHeaders.getFirst(MVW_USER_ID));
         val accessKey = Optional
                 .ofNullable(request.cookies().getFirst(ACCESS_KEY))
                 .map(HttpCookie::getValue)
@@ -180,7 +180,7 @@ public class LoginHandler {
         val device = Optional
                 .ofNullable(request.cookies().getFirst(DEVICE_TYPE))
                 .map(HttpCookie::getValue)
-                .orElse(Optional.ofNullable(httpHeaders.getFirst(DEVICE_TYPE)).orElse("PC"));
+                .orElse(Optional.ofNullable(httpHeaders.getFirst(DEVICE_TYPE)).orElse(DeviceEnum.PC.name()));
 
         val status = Optional.ofNullable(userID)
                 .map(redisTemplate::<String, List>boundHashOps)
@@ -189,7 +189,7 @@ public class LoginHandler {
                 .map(list -> (long) list.get(3) > new Date().getTime())
                 .orElse(false);
 
-        request.attributes().put(X_MVW_VALIDATE_STATUS, status);
+        request.attributes().put(MVW_VALIDATE_STATUS, status);
         return next.handle(request);
     }
 
@@ -200,7 +200,7 @@ public class LoginHandler {
      * @since 2018/12/28
      */
     public Mono<ServerResponse> redirect(ServerRequest request, HandlerFunction<ServerResponse> next) {
-        return request.attribute(X_MVW_VALIDATE_STATUS)
+        return request.attribute(MVW_VALIDATE_STATUS)
                 .filter(status -> (boolean) status)
                 .map(status -> next.handle(request))
                 .orElse(ServerResponse
@@ -355,7 +355,7 @@ public class LoginHandler {
      * @since 2018/12/28
      */
     public Mono<ServerResponse> validate(ServerRequest serverRequest) {
-        val status = serverRequest.attribute("x-mvw-validate")
+        val status = serverRequest.attribute(MVW_VALIDATE_STATUS)
                 .map(flag -> (boolean) flag)
                 .orElse(false);
         val mono = Mono.just(ValidateVO.builder().status(status).build());

@@ -3,12 +3,13 @@ package com.mvwchina.funcation.basicauth.controller;
 import com.google.common.collect.Lists;
 import com.mvwchina.enumeration.DeviceEnum;
 import com.mvwchina.enumeration.LoginTypeEnum;
+import com.mvwchina.funcation.basicauth.PkgConst;
 import com.mvwchina.funcation.basicauth.domain.Account;
 import com.mvwchina.funcation.basicauth.service.AccountService;
 import com.mvwchina.util.MD5;
+import com.mvwchina.util.URLDecoder;
 import com.mvwchina.vo.LoginVO;
 import com.mvwchina.vo.TokenVO;
-import com.mvwchina.util.URLDecoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -34,6 +35,8 @@ import java.util.Optional;
  *
  * @author lujiewen
  * @version 1.0
+ * @apiDefine ServerError
+ * @apiError (Error 5xx) 503 服务不可用
  * @since 2018/11/2 下午3:02
  */
 @Slf4j
@@ -56,10 +59,6 @@ public class LoginController {
     }
 
 
-    /**
-     * @apiDefine ServerError
-     * @apiError (Error 5xx) 503 服务不可用
-     */
     /**
      * @api {post} /login 登录
      * @apiName validate
@@ -149,15 +148,15 @@ public class LoginController {
         String token = MD5.encode(expireDate.toString(), loginVO.getDeviceEnum().name());
 
         /* set Cookie start */
-        Cookie userIdCookie = new Cookie("X-MVW-userID", accountOptional.get().getUseId());
+        Cookie userIdCookie = new Cookie(PkgConst.X_MVW_USER_ID, accountOptional.get().getUseId());
         userIdCookie.setMaxAge(tokenAlive * 24 * 3600);
         response.addCookie(userIdCookie);
 
-        Cookie tokenCookie = new Cookie("access-key", token);
+        Cookie tokenCookie = new Cookie(PkgConst.ACCESS_KEY, token);
         tokenCookie.setMaxAge(tokenAlive * 24 * 3600);
         response.addCookie(tokenCookie);
 
-        Cookie deviceCookie = new Cookie("device-type", deviceEnum.name());
+        Cookie deviceCookie = new Cookie(PkgConst.DEVICE_TYPE, deviceEnum.name());
         tokenCookie.setMaxAge(tokenAlive * 24 * 3600);
         response.addCookie(deviceCookie);
         /* set Cookie end */

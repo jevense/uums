@@ -1,5 +1,6 @@
 package com.mvwchina.funcation.basicauth.controller;
 
+import com.mvwchina.funcation.basicauth.PkgConst;
 import com.mvwchina.vo.ValidateVO;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -51,20 +52,20 @@ public class ValidateController {
      */
     @ResponseBody
     @GetMapping("validate")
-    public ValidateVO handle(@RequestAttribute("x-mvw-validate") boolean status) {
-        return new ValidateVO(status);
+    public ValidateVO handle(@RequestAttribute(PkgConst.X_MVW_VALIDATE) boolean status) {
+        return ValidateVO.builder().status(status).build();
     }
 
     @GetMapping("logout")
-    public String logout(@CookieValue("X-MVW-userID") String userID,
-                         @CookieValue(value = "device-type", defaultValue = "PC") String deviceType,
+    public String logout(@CookieValue(PkgConst.X_MVW_USER_ID) String userID,
+                         @CookieValue(value = PkgConst.DEVICE_TYPE, defaultValue = "PC") String deviceType,
                          HttpServletResponse response) {
 
         //删除Cookie
-        Cookie userIdCookie = new Cookie("X-MVW-userID", null);
+        Cookie userIdCookie = new Cookie(PkgConst.X_MVW_USER_ID, null);
         userIdCookie.setMaxAge(0);
         response.addCookie(userIdCookie);
-        Cookie tokenCookie = new Cookie("access-key", null);
+        Cookie tokenCookie = new Cookie(PkgConst.ACCESS_KEY, null);
         tokenCookie.setMaxAge(0);
         response.addCookie(tokenCookie);
         /* set Cookie end */

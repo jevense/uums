@@ -12,3 +12,17 @@
 package com.mvwchina.funcation.basicauth.handle;
 
 import reactor.util.annotation.NonNullApi;
+
+
+class PkgConst {
+
+    static final String ACCESS_KEY = "access-key";
+
+    static final String DEVICE_TYPE = "device-type";
+
+    static final String MVW_USER_ID = "X-MVW-userID";
+
+    static final String MVW_VALIDATE_TOKEN = "mvw-validate-token";
+
+    static final String MVW_VALIDATE_STATUS = "mvw-validate-status";
+}
