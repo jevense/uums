@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -42,7 +43,7 @@ public class Account extends BaseEntity {
 
     /* 帐号锁定截止时间 */
     @Temporal(TemporalType.TIMESTAMP)
-    private Date lockedUntil;
+    private Calendar lockedUntil;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "account")
     private AccountAttachment accountAttachment;

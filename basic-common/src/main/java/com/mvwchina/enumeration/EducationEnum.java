@@ -12,7 +12,7 @@ public enum EducationEnum {
     DOCTOR("4", "博士研究生"),
     OTHER("5", "其他");
 
-    public static Map<String, EducationEnum> valueMap = new HashMap<>();
+    final static Map<String, EducationEnum> valueMap = new HashMap<>();
 
     static {
         for (EducationEnum entity : EducationEnum.values()) {

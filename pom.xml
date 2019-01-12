@@ -21,6 +21,12 @@
         <docker.image.prefix>springboot</docker.image.prefix>
     </properties>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.1.RELEASE</version>
+    </parent>
+
     <!--<scm>-->
     <!--&lt;!&ndash;connection元素表示一个只读的scm地址&ndash;&gt;-->
     <!--<connection>scm:svn:svn://svn.mvwchina.com/YSJ/Project/IMed3/services/trunk</connection>-->
@@ -44,17 +50,17 @@
     </distributionManagement>
 
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-parent</artifactId>
-                <version>${spring.boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <!--<dependencyManagement>-->
+    <!--<dependencies>-->
+    <!--<dependency>-->
+    <!--<groupId>org.springframework.boot</groupId>-->
+    <!--<artifactId>spring-boot-starter-parent</artifactId>-->
+    <!--<version>${spring.boot.version}</version>-->
+    <!--<type>pom</type>-->
+    <!--<scope>import</scope>-->
+    <!--</dependency>-->
+    <!--</dependencies>-->
+    <!--</dependencyManagement>-->
 
     <modules>
         <module>basic-user</module>
@@ -73,7 +79,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>23.0</version>
+            <version>21.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -100,24 +106,12 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.version}</version>
+                <configuration>
+                    <fork>true</fork>
+                </configuration>
             </plugin>
-            <!-- Docker maven plugin -->
-            <!--<plugin>-->
-            <!--<groupId>com.spotify</groupId>-->
-            <!--<artifactId>docker-maven-plugin</artifactId>-->
-            <!--<version>1.2.0</version>-->
-            <!--<configuration>-->
-            <!--<imageName>${docker.image.prefix}/${project.artifactId}</imageName>-->
-            <!--<dockerDirectory>src/main/docker</dockerDirectory>-->
-            <!--<resources>-->
-            <!--<resource>-->
-            <!--<targetPath>/</targetPath>-->
-            <!--<directory>${project.build.directory}</directory>-->
-            <!--<include>${project.build.finalName}.jar</include>-->
-            <!--</resource>-->
-            <!--</resources>-->
-            <!--</configuration>-->
-            <!--</plugin>-->
+            <!-- webpack -->
         </plugins>
     </build>
 

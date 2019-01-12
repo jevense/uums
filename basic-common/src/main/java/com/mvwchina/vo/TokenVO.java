@@ -28,7 +28,7 @@ public class TokenVO {
 
     private String token;
 
-    private int expiresIn;
+    private long expiresIn;
 
     private String device;
 

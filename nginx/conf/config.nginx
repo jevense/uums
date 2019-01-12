@@ -120,7 +120,8 @@ http {
     #    }
     #}
 
-    include filter.nginx;
+#    include filter.nginx;
+    include filter-yth.nginx;
     #    include proxy.nginx;
     #    include redis.nginx;
 

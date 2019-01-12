@@ -2,6 +2,8 @@ package com.mvwchina.util;
 
 import org.springframework.util.DigestUtils;
 
+import java.nio.charset.Charset;
+
 /**
  * Name:
  * Description:
@@ -15,6 +17,6 @@ import org.springframework.util.DigestUtils;
 public class MD5 {
 
     public static String encode(String source, String salt) {
-        return DigestUtils.md5DigestAsHex((source + salt).getBytes());
+        return DigestUtils.md5DigestAsHex((source + salt).getBytes(Charset.forName("UTF-8")));
     }
 }

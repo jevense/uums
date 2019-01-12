@@ -22,7 +22,7 @@ public enum InstituteCategoryEnum {
     MEDICAL_TRAINING_INSTITUTIONS("15", "医学在职培训机构"),
     OTHER("16", "其他");
 
-    public static Map<String, InstituteCategoryEnum> valueMap = new HashMap<>();
+    final static Map<String, InstituteCategoryEnum> valueMap = new HashMap<>();
 
     static {
         for (InstituteCategoryEnum entity : InstituteCategoryEnum.values()) {

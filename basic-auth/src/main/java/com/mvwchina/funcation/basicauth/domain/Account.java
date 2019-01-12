@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.Calendar;
 
 /**
  * Name: User
@@ -26,11 +26,11 @@ import java.util.Date;
 public class Account extends BaseEntity {
 
     /* 手机号 */
-    @Column(unique = true, nullable = false, columnDefinition = "varchar(255) DEFAULT NULL COMMENT '手机号'")
+    @Column(unique = true, nullable = false, columnDefinition = "varchar(255) DEFAULT '' COMMENT '手机号'")
     private String cellphone;
 
     /* 用户ID */
-    @Column(unique = true, nullable = false, columnDefinition = "varchar(255) DEFAULT NULL COMMENT 'useId'")
+    @Column(unique = true, nullable = false, columnDefinition = "varchar(255) DEFAULT '' COMMENT 'useId'")
     private String useId;
 
     /* 国家编码 */
@@ -39,12 +39,12 @@ public class Account extends BaseEntity {
 
     /* 密码 */
     @JsonIgnore
-    @Column(nullable = false, columnDefinition = "varchar(255) DEFAULT NULL COMMENT '密码'")
+    @Column(nullable = false, columnDefinition = "varchar(255) DEFAULT '' COMMENT '密码'")
     private String password;
 
     /* 帐号锁定截止时间 */
     @Temporal(TemporalType.TIMESTAMP)
-    private Date lockedUntil;
+    private Calendar lockedUntil;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "account")
     private AccountAttachment accountAttachment;

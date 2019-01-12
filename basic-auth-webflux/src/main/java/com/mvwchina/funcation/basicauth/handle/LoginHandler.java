@@ -26,6 +26,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -99,34 +100,34 @@ public class LoginHandler {
      * @since 2018/12/27
      */
     private ServerResponse.BodyBuilder getCookieBodyBuilder(TokenVO tokenVO) {
-
+        int duration = (int) Duration.ofDays(define.getTokenAlive()).getSeconds();
         return getBodyBuilder()
-                .header("Set-Cookie", ResponseCookie
+                .header(PkgConst.SET_COOKIE, ResponseCookie
                         .from(MVW_USER_ID, tokenVO.getUserID())
-                        .maxAge(define.getTokenAlive() * 24 * 3600)
+                        .maxAge(duration)
                         .build().toString())
-                .header("Set-Cookie", ResponseCookie
+                .header(PkgConst.SET_COOKIE, ResponseCookie
                         .from(ACCESS_KEY, tokenVO.getToken())
-                        .maxAge(define.getTokenAlive() * 24 * 3600)
+                        .maxAge(duration)
                         .build().toString())
-                .header("Set-Cookie", ResponseCookie
+                .header(PkgConst.SET_COOKIE, ResponseCookie
                         .from(DEVICE_TYPE, tokenVO.getDevice())
-                        .maxAge(define.getTokenAlive() * 24 * 3600)
+                        .maxAge(duration)
                         .build().toString());
     }
 
     private ServerResponse.BodyBuilder clearCookieBodyBuilder() {
 
         return getBodyBuilder()
-                .header("Set-Cookie", ResponseCookie
+                .header(PkgConst.SET_COOKIE, ResponseCookie
                         .from(MVW_USER_ID, Optional.empty().toString())
                         .maxAge(0)
                         .build().toString())
-                .header("Set-Cookie", ResponseCookie
+                .header(PkgConst.SET_COOKIE, ResponseCookie
                         .from(ACCESS_KEY, Optional.empty().toString())
                         .maxAge(0)
                         .build().toString())
-                .header("Set-Cookie", ResponseCookie
+                .header(PkgConst.SET_COOKIE, ResponseCookie
                         .from(DEVICE_TYPE, Optional.empty().toString())
                         .maxAge(0)
                         .build().toString());
@@ -167,8 +168,9 @@ public class LoginHandler {
                                 .userID(acc.getUseId())
                                 .token(token)
                                 .device(device)
-                                .expiresIn(define.getTokenAlive() * 24 * 3600)
+                                .expiresIn(Duration.ofDays(define.getTokenAlive()).getSeconds())
                                 .build();
+
 
                     }).orElse(TokenVO.builder().status(false).build());
 

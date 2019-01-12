@@ -18,17 +18,19 @@ local res, err = httpc:request_uri(url, {
 })
 
 if not res then
-    ngx.say("failed to request: ", err)
-    return
+    return ngx.say("failed to request: ", err)
 end
 
 if not res.status == 200 then
-    ngx.say("status failed: ", res.status)
-    return
+    return ngx.say("status failed: ", res.status)
 end
 
 local body = cjson.decode(res.body)
 if not body.status then
-    require('redirect_block')()
-    return
+    if 'XMLHttpRequest' == ngx.req.get_headers()['X-Requested-With'] then
+        --如果是ajax请求响应
+        return ngx.exit(ngx.HTTP_UNAUTHORIZED)
+    else
+        return require('redirect_block')()
+    end
 end

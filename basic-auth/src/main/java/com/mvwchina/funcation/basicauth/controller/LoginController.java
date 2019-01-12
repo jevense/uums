@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import com.mvwchina.enumeration.DeviceEnum;
 import com.mvwchina.enumeration.LoginTypeEnum;
 import com.mvwchina.funcation.basicauth.PkgConst;
-import com.mvwchina.funcation.basicauth.domain.Account;
-import com.mvwchina.funcation.basicauth.service.AccountService;
+import com.mvwchina.funcation.basicauth.domain.previous.Human;
+import com.mvwchina.funcation.basicauth.service.HumanService;
 import com.mvwchina.util.MD5;
 import com.mvwchina.util.URLDecoder;
 import com.mvwchina.vo.LoginVO;
@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 /**
@@ -45,7 +47,7 @@ import java.util.Optional;
 public class LoginController {
 
     @Resource
-    private AccountService accountService;
+    private HumanService humanService;
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -137,9 +139,9 @@ public class LoginController {
         loginVO.setLoginTypeEnum(loginTypeEnum);
         loginVO.setDeviceEnum(deviceEnum);
 
-        Optional<Account> accountOptional = accountService.findByPhone(account);
+        Optional<Human> humanOptional = humanService.findByAccount(account);
 
-        if (!accountOptional.isPresent() || !accountService.auth(loginVO, accountOptional.get())) {
+        if (!humanOptional.isPresent() || !humanService.auth(loginVO, humanOptional.get())) {
             return "login";
         }
 
@@ -147,24 +149,34 @@ public class LoginController {
         Date expireDate = Date.from(LocalDateTime.now().plusDays(tokenAlive).atZone(ZoneId.systemDefault()).toInstant());
         String token = MD5.encode(expireDate.toString(), loginVO.getDeviceEnum().name());
 
+        int duration = (int) Duration.ofDays(tokenAlive).getSeconds();
+
         /* set Cookie start */
-        Cookie userIdCookie = new Cookie(PkgConst.X_MVW_USER_ID, accountOptional.get().getUseId());
-        userIdCookie.setMaxAge(tokenAlive * 24 * 3600);
+        Cookie userIdCookie = new Cookie(PkgConst.X_MVW_USER_ID, humanOptional.get().getCaId());
+        userIdCookie.setMaxAge(duration);
         response.addCookie(userIdCookie);
 
         Cookie tokenCookie = new Cookie(PkgConst.ACCESS_KEY, token);
-        tokenCookie.setMaxAge(tokenAlive * 24 * 3600);
+        tokenCookie.setMaxAge(duration);
         response.addCookie(tokenCookie);
 
         Cookie deviceCookie = new Cookie(PkgConst.DEVICE_TYPE, deviceEnum.name());
-        tokenCookie.setMaxAge(tokenAlive * 24 * 3600);
+        deviceCookie.setMaxAge(duration);
         response.addCookie(deviceCookie);
         /* set Cookie end */
 
-        /* set redis start */
-        //[token,deviceid,appid,expire]
+        /*兼容老的一体化*/
+        String previousToken = UUID.randomUUID().toString().replace("-", "");
+        Cookie previousTokenCookie = new Cookie(PkgConst.PREVIOUS_TOKEN, previousToken);
+        previousTokenCookie.setMaxAge(duration);
+        response.addCookie(previousTokenCookie);
+        redisTemplate.opsForHash().put(PkgConst.CA_HUMAN_TOKEN_HUMAN, previousToken, humanOptional.get());
+        redisTemplate.opsForHash().put(PkgConst.CA_HUMAN_CAID_TOKEN, humanOptional.get().getCaId(), previousToken);
+        /*兼容老的一体化*/
+
+        /* set redis start [token,deviceid,appid,expire] */
         List tokenResult = Lists.newArrayList(token, loginVO.getDeviceEnum(), loginVO.getAppId(), expireDate);
-        redisTemplate.opsForHash().put(accountOptional.get().getUseId(), loginVO.getDeviceEnum().name(), tokenResult);
+        redisTemplate.opsForHash().put(humanOptional.get().getCaId(), loginVO.getDeviceEnum().name(), tokenResult);
         /* set redis end */
 
         return "redirect:" + URLDecoder.decode(redirectUri, "home");

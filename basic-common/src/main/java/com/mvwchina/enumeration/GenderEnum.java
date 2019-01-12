@@ -34,7 +34,7 @@ public enum GenderEnum {
     FTM("3", "女性改（变）为男性"),
     OTHER("3", "未说明的性别");
 
-    public static Map<String, GenderEnum> valueMap = new HashMap<>();
+    final static Map<String, GenderEnum> valueMap = new HashMap<>();
 
     static {
         for (GenderEnum gender : GenderEnum.values()) {

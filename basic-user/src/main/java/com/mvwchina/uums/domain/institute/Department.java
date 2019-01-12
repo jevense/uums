@@ -11,7 +11,7 @@ import javax.persistence.OneToMany;
 import java.util.List;
 
 /**
- * Name:
+ * Name: 部门
  * Description:
  * Copyright: Copyright (c) 2018 MVWCHINA All rights Reserved
  * Company: 北京医视时代科技发展有限公司

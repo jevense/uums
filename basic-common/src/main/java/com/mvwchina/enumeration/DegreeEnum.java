@@ -10,7 +10,7 @@ public enum DegreeEnum {
     MASTER("2", "硕士"),
     DOCTOR("3", "博士");
 
-    public static Map<String, DegreeEnum> valueMap = new HashMap<>();
+    final static Map<String, DegreeEnum> valueMap = new HashMap<>();
 
     static {
         for (DegreeEnum entity : DegreeEnum.values()) {

@@ -25,4 +25,6 @@ class PkgConst {
     static final String MVW_VALIDATE_TOKEN = "mvw-validate-token";
 
     static final String MVW_VALIDATE_STATUS = "mvw-validate-status";
+
+    static final String SET_COOKIE = "Set-Cookie";
 }

@@ -8,7 +8,7 @@ public enum DegreeTypeEnum {
     SCIENCE("1", "医学科学学位"),
     MEDICAL("2", "医学专业学位");
 
-    public static Map<String, DegreeTypeEnum> valueMap = new HashMap<>();
+    final static Map<String, DegreeTypeEnum> valueMap = new HashMap<>();
 
     static {
         for (DegreeTypeEnum entity : DegreeTypeEnum.values()) {

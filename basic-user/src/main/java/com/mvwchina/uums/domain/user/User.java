@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -67,7 +68,7 @@ public class User extends BaseEntity {
     private String licenseNum;
 
     /* 出生日期 */
-    private Date birthday;
+    private Calendar birthday;
 
     /* 民族 */
     @Enumerated(EnumType.STRING)
@@ -108,13 +109,13 @@ public class User extends BaseEntity {
     private String occupation;
 
     /* 现职聘用时间 */
-    private Date occupationStart;
+    private Calendar occupationStart;
 
     /* 是否中级满三年 */
     private Boolean interMediateOver3Years;
 
     /* 起始带教时间 */
-    private Date teachingStart;
+    private Calendar teachingStart;
 
     /* 带教年限 */
     private String teachingAge;
@@ -127,6 +128,8 @@ public class User extends BaseEntity {
 
     /* 来参加培训人员的原工作单位 */
     private String everUnit;
+
+
 
 
 }

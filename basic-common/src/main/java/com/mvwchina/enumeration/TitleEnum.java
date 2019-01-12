@@ -23,7 +23,7 @@ public enum TitleEnum {
     TECHNICIAN("16", "技师、技士"),
     NONE("17", "无");
 
-    public static Map<String, TitleEnum> valueMap = new HashMap<>();
+    final static Map<String, TitleEnum> valueMap = new HashMap<>();
 
     static {
         for (TitleEnum entity : TitleEnum.values()) {

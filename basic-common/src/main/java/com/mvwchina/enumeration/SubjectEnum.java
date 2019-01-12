@@ -50,7 +50,7 @@ public enum SubjectEnum {
     Pathology("3300", "口腔病理科"), //
     MaxillofacialImaging("3400", "口腔颌面影像科");
 
-    public static Map<String, String> valueMap = new HashMap<>();
+    final static Map<String, String> valueMap = new HashMap<>();
 
     static {
         for (SubjectEnum subject : SubjectEnum.values()) {
@@ -58,8 +58,9 @@ public enum SubjectEnum {
         }
     }
 
-    public String key;
-    public String name;
+    private String key;
+
+    private String name;
 
     SubjectEnum(String key, String name) {
         this.key = key;

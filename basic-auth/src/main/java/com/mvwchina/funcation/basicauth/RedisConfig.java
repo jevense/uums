@@ -27,7 +27,7 @@ public class RedisConfig {
         return new JsonRedisTemplate(factory);
     }
 
-    class JsonRedisTemplate extends RedisTemplate<String, Object> {
+    static class JsonRedisTemplate extends RedisTemplate<String, Object> {
 
         JsonRedisTemplate() {
             setKeySerializer(RedisSerializer.string());
