@@ -18,11 +18,12 @@ end
 
 local body = cjson.decode(res.body)
 if not body.status then
-    if 'XMLHttpRequest' == ngx.req.get_headers()['X-Requested-With'] then
+    local head = ngx.req.get_headers();
+    if 'XMLHttpRequest' == head['X-Requested-With'] or 'application/json' == head['Content-Type'] then
         --如果是ajax请求响应
         return ngx.exit(ngx.HTTP_UNAUTHORIZED)
     else
-        local source = ngx.var.scheme .. '://' .. ngx.var.server_name .. ':' .. ngx.var.server_port .. ngx.var.request_uri
+        local source = 'https://newzp.mvwchina.com/' .. ngx.var.request_uri
         local redirect_uri = '/login?redirect_uri=' .. ngx.escape_uri(source)
         return ngx.redirect(redirect_uri, ngx.HTTP_MOVED_TEMPORARILY)
     end

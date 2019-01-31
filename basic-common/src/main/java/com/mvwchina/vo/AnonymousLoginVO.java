@@ -1,9 +1,6 @@
 package com.mvwchina.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -11,23 +8,19 @@ import javax.validation.constraints.NotNull;
 /**
  * Name:
  * Description:
- * Copyright: Copyright (c) 2018 MVWCHINA All rights Reserved
+ * Copyright: Copyright (c) 2019 MVWCHINA All rights Reserved
  * Company: 北京医视时代科技发展有限公司
  *
  * @author lujiewen
  * @version 1.0
- * @since 2018/12/21 上午12:36
+ * @since 2019/1/16 下午3:34
  */
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class LoginVO {
+public class AnonymousLoginVO {
 
     @NotBlank(message = "用户名不能为空")
     private String account;
 
-    @NotNull(message = "密码不能为空")
-    private String password;
-
+    @NotNull(message = "机构不能为空")
+    private String instituteNumber;
 }

@@ -3,11 +3,6 @@ package com.mvwchina.vo;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 /**
  * Name:
  * Description:
@@ -18,8 +13,8 @@ import java.util.function.Supplier;
  * @version 1.0
  * @since 2018/12/19 下午2:32
  */
-@Builder
 @Data
+@Builder
 public class TokenVO {
 
     private boolean status;
@@ -33,4 +28,6 @@ public class TokenVO {
     private String device;
 
     private String reason;
+
+    private String previousToken;
 }

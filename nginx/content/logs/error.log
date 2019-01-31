@@ -1,174 +1,61 @@
-2019/01/11 19:46:18 [notice] 89491#2780753: using the "kqueue" event method
-2019/01/11 19:46:18 [notice] 89491#2780753: start worker processes
-2019/01/11 19:46:18 [notice] 89491#2780753: start worker process 93771
-2019/01/11 19:46:18 [notice] 89491#2780753: signal 23 (SIGIO) received
-2019/01/11 19:46:18 [notice] 89491#2780753: signal 23 (SIGIO) received
-2019/01/11 19:46:18 [notice] 89491#2780753: signal 20 (SIGCHLD) received from 93476
-2019/01/11 19:46:18 [notice] 89491#2780753: worker process 93476 exited with code 0
-2019/01/11 19:46:18 [notice] 89491#2780753: signal 23 (SIGIO) received
-2019/01/11 19:46:18 [notice] 89491#2780753: signal 23 (SIGIO) received from 93771
-2019/01/11 19:47:35 [error] 93771#2950589: *944 upstream timed out (60: Operation timed out) while reading response header from upstream, client: 127.0.0.1, server: 127.0.0.1, request: "POST /services HTTP/1.1", upstream: "http://127.0.0.1:8500/services", host: "127.0.0.1:8080", referrer: "http://127.0.0.1:8080/b_baseSet.html?&opdata=b_baseSet&instituteNumber=HWM110105016"
-2019/01/11 19:48:52 [notice] 89491#2780753: signal 3 (SIGQUIT) received from 93858, shutting down
-2019/01/11 19:48:52 [notice] 93771#2950589: gracefully shutting down
-2019/01/11 19:48:52 [notice] 89491#2780753: signal 23 (SIGIO) received from 93771
-2019/01/11 19:48:52 [notice] 93771#2950589: exiting
-2019/01/11 19:48:52 [notice] 93771#2950589: exit
-2019/01/11 19:48:52 [notice] 89491#2780753: signal 20 (SIGCHLD) received from 93771
-2019/01/11 19:48:52 [notice] 89491#2780753: worker process 93771 exited with code 0
-2019/01/11 19:48:52 [notice] 89491#2780753: exit
-2019/01/11 19:49:04 [notice] 93867#2955573: using the "kqueue" event method
-2019/01/11 19:49:04 [notice] 93867#2955573: openresty/1.13.6.2
-2019/01/11 19:49:04 [notice] 93867#2955573: built by clang 9.1.0 (clang-902.0.39.2)
-2019/01/11 19:49:04 [notice] 93867#2955573: OS: Darwin 17.7.0
-2019/01/11 19:49:04 [notice] 93867#2955573: hw.ncpu: 4
-2019/01/11 19:49:04 [notice] 93867#2955573: net.inet.tcp.sendspace: 131072
-2019/01/11 19:49:04 [notice] 93867#2955573: kern.ipc.somaxconn: 128
-2019/01/11 19:49:04 [notice] 93867#2955573: getrlimit(RLIMIT_NOFILE): 10240:9223372036854775807
-2019/01/11 19:49:04 [notice] 93868#2955574: start worker processes
-2019/01/11 19:49:04 [notice] 93868#2955574: start worker process 93869
-2019/01/11 19:49:22 [error] 93869#2955575: *1 lua entry thread aborted: runtime error: ...deaProjects/uums/nginx/content/../lua/access_capture.lua:20: bad argument #1 to 'log' (number expected, got nil)
+2019/01/29 17:18:48 [notice] 7869#640261: using the "kqueue" event method
+2019/01/29 17:18:48 [notice] 7869#640261: start worker processes
+2019/01/29 17:18:48 [notice] 7869#640261: start worker process 9021
+2019/01/29 17:18:48 [notice] 7869#640261: signal 23 (SIGIO) received
+2019/01/29 17:18:48 [notice] 7869#640261: signal 23 (SIGIO) received
+2019/01/29 17:18:48 [notice] 7869#640261: signal 20 (SIGCHLD) received from 8987
+2019/01/29 17:18:48 [notice] 7869#640261: worker process 8987 exited with code 0
+2019/01/29 17:18:48 [notice] 7869#640261: signal 23 (SIGIO) received
+2019/01/29 17:18:48 [notice] 7869#640261: signal 23 (SIGIO) received from 9021
+2019/01/29 17:18:50 [notice] 9021#744900: *115 [lua] access_reset_cookie.lua:28: nil while sending to client, client: 127.0.0.1, server: 127.0.0.1, request: "GET /ui/phone?token=c7bf423edb624d168851d6e2bee086bc HTTP/1.1", host: "127.0.0.1:8400"
+2019/01/29 17:19:13 [info] 9021#744900: *116 client closed connection while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8400
+2019/01/29 17:26:57 [notice] 7869#640261: signal 1 (SIGHUP) received from 9115, reconfiguring
+2019/01/29 17:26:57 [notice] 7869#640261: reconfiguring
+2019/01/29 17:26:57 [notice] 7869#640261: using the "kqueue" event method
+2019/01/29 17:26:57 [notice] 7869#640261: start worker processes
+2019/01/29 17:26:57 [notice] 7869#640261: start worker process 9116
+2019/01/29 17:26:57 [notice] 7869#640261: signal 23 (SIGIO) received
+2019/01/29 17:26:57 [notice] 9021#744900: gracefully shutting down
+2019/01/29 17:26:57 [notice] 7869#640261: signal 23 (SIGIO) received
+2019/01/29 17:26:57 [notice] 9021#744900: exiting
+2019/01/29 17:26:57 [notice] 9021#744900: exit
+2019/01/29 17:26:57 [notice] 7869#640261: signal 20 (SIGCHLD) received from 9021
+2019/01/29 17:26:57 [notice] 7869#640261: worker process 9021 exited with code 0
+2019/01/29 17:26:57 [notice] 7869#640261: signal 23 (SIGIO) received
+2019/01/29 17:26:57 [notice] 7869#640261: signal 23 (SIGIO) received from 9116
+2019/01/29 17:27:03 [error] 9116#759950: *119 lua entry thread aborted: runtime error: ...ojects/uums/nginx/content/../lua/access_reset_cookie.lua:21: Expected value but found invalid token at character 1
 stack traceback:
 coroutine 0:
-	[C]: in function 'log'
-	...deaProjects/uums/nginx/content/../lua/access_capture.lua:20: in function <...deaProjects/uums/nginx/content/../lua/access_capture.lua:1> while sending to client, client: 127.0.0.1, server: 127.0.0.1, request: "GET /b_baseSet.html?&opdata=b_baseSet&instituteNumber=HWM110105016 HTTP/1.1", host: "127.0.0.1:8080"
-2019/01/11 19:49:25 [error] 93869#2955575: *2 lua entry thread aborted: runtime error: ...deaProjects/uums/nginx/content/../lua/access_capture.lua:20: bad argument #1 to 'log' (number expected, got nil)
-stack traceback:
-coroutine 0:
-	[C]: in function 'log'
-	...deaProjects/uums/nginx/content/../lua/access_capture.lua:20: in function <...deaProjects/uums/nginx/content/../lua/access_capture.lua:1> while sending to client, client: 127.0.0.1, server: 127.0.0.1, request: "GET /b_baseSet.html?&opdata=b_baseSet&instituteNumber=HWM110105016 HTTP/1.1", host: "127.0.0.1:8080"
-2019/01/11 19:49:27 [error] 93869#2955575: *4 lua entry thread aborted: runtime error: ...deaProjects/uums/nginx/content/../lua/access_capture.lua:20: bad argument #1 to 'log' (number expected, got nil)
-stack traceback:
-coroutine 0:
-	[C]: in function 'log'
-	...deaProjects/uums/nginx/content/../lua/access_capture.lua:20: in function <...deaProjects/uums/nginx/content/../lua/access_capture.lua:1> while sending to client, client: 127.0.0.1, server: 127.0.0.1, request: "GET /b_baseSet.html?&opdata=b_baseSet&instituteNumber=HWM110105016 HTTP/1.1", host: "127.0.0.1:8080"
-2019/01/11 19:49:33 [error] 93869#2955575: *6 lua entry thread aborted: runtime error: ...deaProjects/uums/nginx/content/../lua/access_capture.lua:20: bad argument #1 to 'log' (number expected, got nil)
-stack traceback:
-coroutine 0:
-	[C]: in function 'log'
-	...deaProjects/uums/nginx/content/../lua/access_capture.lua:20: in function <...deaProjects/uums/nginx/content/../lua/access_capture.lua:1> while sending to client, client: 127.0.0.1, server: 127.0.0.1, request: "GET /b_baseSet.html?&opdata=b_baseSet&instituteNumber=HWM110105016 HTTP/1.1", host: "127.0.0.1:8080"
-2019/01/11 19:50:07 [emerg] 93909#2957099: bind() to 0.0.0.0:8080 failed (48: Address already in use)
-2019/01/11 19:50:07 [notice] 93909#2957099: try again to bind() after 500ms
-2019/01/11 19:50:07 [emerg] 93909#2957099: bind() to 0.0.0.0:8080 failed (48: Address already in use)
-2019/01/11 19:50:07 [notice] 93909#2957099: try again to bind() after 500ms
-2019/01/11 19:50:07 [emerg] 93909#2957099: bind() to 0.0.0.0:8080 failed (48: Address already in use)
-2019/01/11 19:50:07 [notice] 93909#2957099: try again to bind() after 500ms
-2019/01/11 19:50:07 [emerg] 93909#2957099: bind() to 0.0.0.0:8080 failed (48: Address already in use)
-2019/01/11 19:50:07 [notice] 93909#2957099: try again to bind() after 500ms
-2019/01/11 19:50:07 [emerg] 93909#2957099: bind() to 0.0.0.0:8080 failed (48: Address already in use)
-2019/01/11 19:50:07 [notice] 93909#2957099: try again to bind() after 500ms
-2019/01/11 19:50:07 [emerg] 93909#2957099: still could not bind()
-2019/01/11 19:50:27 [notice] 93868#2955574: signal 3 (SIGQUIT) received from 93922, shutting down
-2019/01/11 19:50:27 [notice] 93869#2955575: gracefully shutting down
-2019/01/11 19:50:27 [notice] 93868#2955574: signal 23 (SIGIO) received from 93869
-2019/01/11 19:50:31 [notice] 93868#2955574: signal 3 (SIGQUIT) received from 93925, shutting down
-2019/01/11 19:50:33 [info] 93869#2955575: *8 client timed out (60: Operation timed out) while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8080
-2019/01/11 19:50:33 [notice] 93869#2955575: exiting
-2019/01/11 19:50:33 [notice] 93869#2955575: exit
-2019/01/11 19:50:33 [notice] 93868#2955574: signal 20 (SIGCHLD) received from 93869
-2019/01/11 19:50:33 [notice] 93868#2955574: worker process 93869 exited with code 0
-2019/01/11 19:50:33 [notice] 93868#2955574: exit
-2019/01/11 19:50:45 [notice] 93940#2958239: using the "kqueue" event method
-2019/01/11 19:50:45 [notice] 93940#2958239: openresty/1.13.6.2
-2019/01/11 19:50:45 [notice] 93940#2958239: built by clang 9.1.0 (clang-902.0.39.2)
-2019/01/11 19:50:45 [notice] 93940#2958239: OS: Darwin 17.7.0
-2019/01/11 19:50:45 [notice] 93940#2958239: hw.ncpu: 4
-2019/01/11 19:50:45 [notice] 93940#2958239: net.inet.tcp.sendspace: 131072
-2019/01/11 19:50:45 [notice] 93940#2958239: kern.ipc.somaxconn: 128
-2019/01/11 19:50:45 [notice] 93940#2958239: getrlimit(RLIMIT_NOFILE): 10240:9223372036854775807
-2019/01/11 19:50:45 [notice] 93941#2958240: start worker processes
-2019/01/11 19:50:45 [notice] 93941#2958240: start worker process 93942
-2019/01/11 19:50:56 [error] 93942#2958241: *1 lua entry thread aborted: runtime error: ...deaProjects/uums/nginx/content/../lua/access_capture.lua:20: attempt to call field 'debug' (a nil value)
-stack traceback:
-coroutine 0:
-	...deaProjects/uums/nginx/content/../lua/access_capture.lua: in function <...deaProjects/uums/nginx/content/../lua/access_capture.lua:1> while sending to client, client: 127.0.0.1, server: 127.0.0.1, request: "GET /b_baseSet.html?&opdata=b_baseSet&instituteNumber=HWM110105016 HTTP/1.1", host: "127.0.0.1:8080"
-2019/01/11 19:51:25 [info] 93942#2958241: *2 client closed connection while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8080
-2019/01/11 19:51:25 [error] 93942#2958241: *4 lua entry thread aborted: runtime error: ...deaProjects/uums/nginx/content/../lua/access_capture.lua:20: attempt to call field 'debug' (a nil value)
-stack traceback:
-coroutine 0:
-	...deaProjects/uums/nginx/content/../lua/access_capture.lua: in function <...deaProjects/uums/nginx/content/../lua/access_capture.lua:1> while sending to client, client: 127.0.0.1, server: 127.0.0.1, request: "POST /services HTTP/1.1", host: "127.0.0.1:8080", referrer: "http://127.0.0.1:8080/"
-2019/01/11 19:52:25 [info] 93942#2958241: *5 client timed out (60: Operation timed out) while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8080
-2019/01/11 19:52:58 [notice] 93941#2958240: signal 1 (SIGHUP) received from 94022, reconfiguring
-2019/01/11 19:52:58 [notice] 93941#2958240: reconfiguring
-2019/01/11 19:52:58 [notice] 93941#2958240: using the "kqueue" event method
-2019/01/11 19:52:58 [notice] 93941#2958240: start worker processes
-2019/01/11 19:52:58 [notice] 93941#2958240: start worker process 94023
-2019/01/11 19:52:58 [notice] 93942#2958241: gracefully shutting down
-2019/01/11 19:52:58 [notice] 93941#2958240: signal 23 (SIGIO) received
-2019/01/11 19:52:58 [notice] 93941#2958240: signal 23 (SIGIO) received
-2019/01/11 19:52:58 [notice] 93942#2958241: exiting
-2019/01/11 19:52:58 [notice] 93942#2958241: exit
-2019/01/11 19:52:58 [notice] 93941#2958240: signal 20 (SIGCHLD) received from 93942
-2019/01/11 19:52:58 [notice] 93941#2958240: worker process 93942 exited with code 0
-2019/01/11 19:52:58 [notice] 93941#2958240: signal 23 (SIGIO) received
-2019/01/11 19:52:58 [notice] 93941#2958240: signal 23 (SIGIO) received from 94023
-2019/01/11 19:53:01 [debug] 94023#2961634: *7 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:53:02 [debug] 94023#2961634: *7 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:53:08 [debug] 94023#2961634: *7 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:53:08 [debug] 94023#2961634: *7 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:53:08 [debug] 94023#2961634: *7 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:53:09 [debug] 94023#2961634: *7 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:53:09 [debug] 94023#2961634: *8 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:53:09 [debug] 94023#2961634: *7 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:53:09 [debug] 94023#2961634: *8 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:53:09 [debug] 94023#2961634: *27 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:53:09 [debug] 94023#2961634: *28 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:53:09 [debug] 94023#2961634: *31 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:53:09 [debug] 94023#2961634: *31 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:53:09 [debug] 94023#2961634: *28 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:53:09 [debug] 94023#2961634: *27 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:53:09 [debug] 94023#2961634: *39 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:53:10 [debug] 94023#2961634: *7 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:54:09 [error] 94023#2961634: *8 upstream timed out (60: Operation timed out) while reading response header from upstream, client: 127.0.0.1, server: 127.0.0.1, request: "POST /services HTTP/1.1", upstream: "http://127.0.0.1:8500/services", host: "127.0.0.1:8080", referrer: "http://127.0.0.1:8080/b_baseSet.html?&opdata=b_baseSet&instituteNumber=HWM110105016"
-2019/01/11 19:54:21 [debug] 94023#2961634: *8 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:54:21 [debug] 94023#2961634: *8 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:54:21 [debug] 94023#2961634: *8 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:54:41 [debug] 94023#2961634: *8 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:54:41 [debug] 94023#2961634: *8 [lua] access_capture.lua:20:  X-Requested-With : nil
-2019/01/11 19:56:41 [notice] 93941#2958240: signal 1 (SIGHUP) received from 94174, reconfiguring
-2019/01/11 19:56:41 [notice] 93941#2958240: reconfiguring
-2019/01/11 19:56:41 [notice] 93941#2958240: using the "kqueue" event method
-2019/01/11 19:56:41 [notice] 93941#2958240: start worker processes
-2019/01/11 19:56:41 [notice] 93941#2958240: start worker process 94175
-2019/01/11 19:56:41 [notice] 93941#2958240: signal 23 (SIGIO) received
-2019/01/11 19:56:41 [notice] 93941#2958240: signal 23 (SIGIO) received
-2019/01/11 19:56:41 [notice] 94023#2961634: gracefully shutting down
-2019/01/11 19:56:41 [notice] 94023#2961634: exiting
-2019/01/11 19:56:41 [notice] 94023#2961634: exit
-2019/01/11 19:56:41 [notice] 93941#2958240: signal 20 (SIGCHLD) received from 94023
-2019/01/11 19:56:41 [notice] 93941#2958240: worker process 94023 exited with code 0
-2019/01/11 19:56:41 [notice] 93941#2958240: signal 23 (SIGIO) received
-2019/01/11 19:56:41 [notice] 93941#2958240: signal 23 (SIGIO) received from 94175
-2019/01/11 19:56:58 [debug] 94175#2968228: *57 [lua] access_capture.lua:20:  Head : {}
-2019/01/11 19:56:58 [debug] 94175#2968228: *57 [lua] access_capture.lua:21:  X-Requested-With : XMLHttpRequest
-2019/01/11 19:56:58 [debug] 94175#2968228: *57 [lua] access_capture.lua:20:  Head : {}
-2019/01/11 19:56:58 [debug] 94175#2968228: *57 [lua] access_capture.lua:21:  X-Requested-With : XMLHttpRequest
-2019/01/11 19:56:58 [debug] 94175#2968228: *57 [lua] access_capture.lua:20:  Head : {}
-2019/01/11 19:56:58 [debug] 94175#2968228: *57 [lua] access_capture.lua:21:  X-Requested-With : XMLHttpRequest
-2019/01/11 19:58:07 [notice] 93941#2958240: signal 1 (SIGHUP) received from 94243, reconfiguring
-2019/01/11 19:58:07 [notice] 93941#2958240: reconfiguring
-2019/01/11 19:58:07 [notice] 93941#2958240: using the "kqueue" event method
-2019/01/11 19:58:07 [notice] 93941#2958240: start worker processes
-2019/01/11 19:58:07 [notice] 93941#2958240: start worker process 94244
-2019/01/11 19:58:08 [notice] 93941#2958240: signal 23 (SIGIO) received
-2019/01/11 19:58:08 [notice] 94175#2968228: gracefully shutting down
-2019/01/11 19:58:08 [notice] 93941#2958240: signal 23 (SIGIO) received
-2019/01/11 19:58:08 [notice] 94175#2968228: exiting
-2019/01/11 19:58:08 [notice] 94175#2968228: exit
-2019/01/11 19:58:08 [notice] 93941#2958240: signal 20 (SIGCHLD) received from 94175
-2019/01/11 19:58:08 [notice] 93941#2958240: worker process 94175 exited with code 0
-2019/01/11 19:58:08 [notice] 93941#2958240: signal 23 (SIGIO) received
-2019/01/11 19:58:08 [notice] 93941#2958240: signal 23 (SIGIO) received from 94244
-2019/01/11 19:58:08 [notice] 93941#2958240: signal 23 (SIGIO) received
-2019/01/11 20:02:57 [error] 94244#2971102: *77 upstream timed out (60: Operation timed out) while reading response header from upstream, client: 127.0.0.1, server: 127.0.0.1, request: "POST /services HTTP/1.1", upstream: "http://127.0.0.1:8500/services", host: "127.0.0.1:8080", referrer: "http://127.0.0.1:8080/b_baseSet.html?&opdata=b_baseSet&instituteNumber=HWM110105016"
-2019/01/11 20:04:28 [error] 94244#2971102: *127 upstream timed out (60: Operation timed out) while reading response header from upstream, client: 127.0.0.1, server: 127.0.0.1, request: "POST /services HTTP/1.1", upstream: "http://127.0.0.1:8500/services", host: "127.0.0.1:8080", referrer: "http://127.0.0.1:8080/b_baseSet.html?&opdata=b_baseSet&instituteNumber=HWM110105016"
-2019/01/11 20:06:56 [error] 94244#2971102: *159 upstream timed out (60: Operation timed out) while reading response header from upstream, client: 127.0.0.1, server: 127.0.0.1, request: "POST /services HTTP/1.1", upstream: "http://127.0.0.1:8500/services", host: "127.0.0.1:8080", referrer: "http://127.0.0.1:8080/b_baseSet.html?&opdata=b_baseSet&instituteNumber=HWM110105016"
-2019/01/11 20:08:45 [error] 94244#2971102: *285 upstream timed out (60: Operation timed out) while reading response header from upstream, client: 127.0.0.1, server: 127.0.0.1, request: "POST /services HTTP/1.1", upstream: "http://127.0.0.1:8500/services", host: "127.0.0.1:8080", referrer: "http://127.0.0.1:8080/b_baseSet.html?&opdata=b_baseSet&instituteNumber=HWM110105016"
-2019/01/11 20:14:14 [info] 94244#2971102: *315 client closed connection while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8080
-2019/01/11 20:20:03 [error] 94244#2971102: *318 open() "/Users/lujiewen/IdeaProjects/uums/nginx/content/html/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:8080", referrer: "http://localhost:8080/"
-2019/01/11 20:20:17 [info] 94244#2971102: *319 client closed connection while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8080
-2019/01/11 20:22:02 [error] 94244#2971102: *321 upstream timed out (60: Operation timed out) while reading response header from upstream, client: 127.0.0.1, server: 127.0.0.1, request: "POST /services HTTP/1.1", upstream: "http://127.0.0.1:8500/services", host: "127.0.0.1:8080", referrer: "http://127.0.0.1:8080/a_productManage.html?&opdata=a_productManage&instituteNumber=HWM110105016"
-2019/01/11 20:22:03 [error] 94244#2971102: *351 upstream timed out (60: Operation timed out) while reading response header from upstream, client: 127.0.0.1, server: 127.0.0.1, request: "POST /services HTTP/1.1", upstream: "http://127.0.0.1:8500/services", host: "127.0.0.1:8080", referrer: "http://127.0.0.1:8080/a_productManage.html?&opdata=a_productManage&instituteNumber=HWM110105016"
-2019/01/11 20:22:34 [info] 94244#2971102: *321 kevent() reported that client prematurely closed connection, so upstream connection is closed too while sending request to upstream, client: 127.0.0.1, server: 127.0.0.1, request: "POST /services HTTP/1.1", upstream: "http://127.0.0.1:8500/services", host: "127.0.0.1:8080", referrer: "http://127.0.0.1:8080/a_noticeManage.html?&opdata=a_noticeManage&instituteNumber=HWM110105016"
-2019/01/11 20:22:34 [info] 94244#2971102: *400 kevent() reported that client prematurely closed connection, so upstream connection is closed too while sending request to upstream, client: 127.0.0.1, server: 127.0.0.1, request: "POST /services HTTP/1.1", upstream: "http://127.0.0.1:8500/services", host: "127.0.0.1:8080", referrer: "http://127.0.0.1:8080/a_noticeManage.html?&opdata=a_noticeManage&instituteNumber=HWM110105016"
-2019/01/11 20:23:34 [error] 94244#2971102: *403 upstream timed out (60: Operation timed out) while reading response header from upstream, client: 127.0.0.1, server: 127.0.0.1, request: "POST /services HTTP/1.1", upstream: "http://127.0.0.1:8500/services", host: "127.0.0.1:8080", referrer: "http://127.0.0.1:8080/a_productManage.html?&opdata=a_productManage&instituteNumber=HWM110105016"
-2019/01/11 20:23:34 [error] 94244#2971102: *351 upstream timed out (60: Operation timed out) while reading response header from upstream, client: 127.0.0.1, server: 127.0.0.1, request: "POST /services HTTP/1.1", upstream: "http://127.0.0.1:8500/services", host: "127.0.0.1:8080", referrer: "http://127.0.0.1:8080/a_productManage.html?&opdata=a_productManage&instituteNumber=HWM110105016"
+	[C]: in function 'decode'
+	...ojects/uums/nginx/content/../lua/access_reset_cookie.lua:21: in function <...ojects/uums/nginx/content/../lua/access_reset_cookie.lua:1> while sending to client, client: 127.0.0.1, server: 127.0.0.1, request: "GET /ui/phone?token=c7bf423edb624d168851d6e2bee086bc HTTP/1.1", host: "127.0.0.1:8400"
+2019/01/29 17:27:44 [info] 9116#759950: *120 client closed connection while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8400
+2019/01/29 17:28:04 [info] 9116#759950: *123 client closed connection while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8400
+2019/01/29 17:30:35 [info] 9116#759950: *126 client closed connection while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8400
+2019/01/29 17:33:58 [notice] 7869#640261: signal 1 (SIGHUP) received from 9195, reconfiguring
+2019/01/29 17:33:58 [notice] 7869#640261: reconfiguring
+2019/01/29 17:33:58 [notice] 7869#640261: using the "kqueue" event method
+2019/01/29 17:33:58 [notice] 7869#640261: start worker processes
+2019/01/29 17:33:58 [notice] 7869#640261: start worker process 9196
+2019/01/29 17:33:58 [notice] 7869#640261: signal 23 (SIGIO) received
+2019/01/29 17:33:58 [notice] 7869#640261: signal 23 (SIGIO) received
+2019/01/29 17:33:58 [notice] 9116#759950: gracefully shutting down
+2019/01/29 17:33:58 [notice] 9116#759950: exiting
+2019/01/29 17:33:58 [notice] 9116#759950: exit
+2019/01/29 17:33:58 [notice] 7869#640261: signal 20 (SIGCHLD) received from 9116
+2019/01/29 17:33:58 [notice] 7869#640261: worker process 9116 exited with code 0
+2019/01/29 17:33:58 [notice] 7869#640261: signal 23 (SIGIO) received
+2019/01/29 17:33:58 [notice] 7869#640261: signal 23 (SIGIO) received from 9196
+2019/01/29 17:33:58 [notice] 7869#640261: signal 23 (SIGIO) received
+2019/01/29 17:34:18 [info] 9196#773343: *130 client closed connection while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8400
+2019/01/29 17:35:38 [info] 9196#773343: *133 client closed connection while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8400
+2019/01/29 17:37:19 [info] 9196#773343: *139 client closed connection while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8400
+2019/01/29 17:37:50 [info] 9196#773343: *141 client closed connection while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8400
+2019/01/29 17:38:52 [info] 9196#773343: *145 client closed connection while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8400
+2019/01/29 20:19:33 [notice] 9196#773343: signal 15 (SIGTERM) received from 1, exiting
+2019/01/29 20:19:33 [notice] 7869#640261: signal 15 (SIGTERM) received from 1, exiting
+2019/01/29 20:19:33 [info] 9196#773343: kevent() failed (4: Interrupted system call)
+2019/01/29 20:19:33 [notice] 9196#773343: exiting
+2019/01/29 20:19:33 [notice] 9196#773343: exit
+2019/01/29 20:19:33 [notice] 7869#640261: signal 20 (SIGCHLD) received from 9196
+2019/01/29 20:19:33 [notice] 7869#640261: worker process 9196 exited with code 0
+2019/01/29 20:19:33 [notice] 7869#640261: exit

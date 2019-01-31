@@ -4,18 +4,27 @@ upstream auth{
 upstream services{
     server 127.0.0.1:8500;
 }
+#upstream zhupei{
+#    server 127.0.0.1:27212;
+#}
+
 upstream zhupei{
-    server 127.0.0.1:27212;
+    server 127.0.0.1:8082;
 }
 
-#lua_package_path '/Users/lujiewen/IdeaProjects/uums/nginx/lualib/?.lua;;';
-lua_package_path '../lualib/?.lua;;';
+upstream import{
+    server 127.0.0.1:8082;
+}
+
+lua_package_path '/Users/lujiewen/IdeaProjects/uums/nginx/lualib/?.lua;;';
+#lua_package_path '../lualib/?.lua;;';
 
 server {
     listen       8400;
     #    server_name  192.168.8.144;
     #    server_name  192.168.1.100;
-    server_name  123.56.15.197;
+    #    server_name  123.56.15.197;
+    server_name  127.0.0.1;
 
     root html;
     index index.html index.htm;
@@ -27,6 +36,10 @@ server {
 
     #验证接口
     location = /validate{
+        proxy_pass http://auth;
+    }
+
+    location = /validateToken{
         proxy_pass http://auth;
     }
 
@@ -55,11 +68,27 @@ server {
 
     }
 
+    location /uploadUser{
+        proxy_pass http://import;
+    }
+
     location /ui{
         access_by_lua_file ../lua/access_capture.lua;
+        rewrite_by_lua_block {
+            if not string.find(ngx.var.request_uri, '.', 1, true) then
+                return ngx.redirect('/ui/pc/index.html')
+            end
+        }
         proxy_pass http://zhupei/ui;
 
     }
+
+    location /ui/phone{
+        access_by_lua_file ../lua/access_reset_cookie.lua;
+        proxy_pass http://auth/cookie;
+        proxy_cookie_path /cookie /ui/phone;
+    }
+
 
     location /rest{
         access_by_lua_file ../lua/access_capture.lua;
@@ -68,7 +97,7 @@ server {
     }
 
     location /{
-        access_by_lua_file ../lua/access_capture.lua;
+#        access_by_lua_file ../lua/access_capture.lua;
 
         default_type text/html;
         root   html;

@@ -24,6 +24,14 @@ public class PkgConst {
 
     /*兼容之前*/
     public static final String PREVIOUS_TOKEN = "previous-token";
+
     public static final String CA_HUMAN_CAID_TOKEN = "ca_human_caId_token";
+
+    public static final String CA_HUMAN_TOKEN_CAID = "ca_human_token_caId";
+
     public static final String CA_HUMAN_TOKEN_HUMAN = "ca_human_token_human";
+
+    public static final String CA_HUMAN_CAID_HUMAN ="ca_human_caId_human";
+
+    public static final String NO_SECURITY_COOKIE = "X-NO-SECURITY";
 }

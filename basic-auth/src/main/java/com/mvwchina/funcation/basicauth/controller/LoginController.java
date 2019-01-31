@@ -3,16 +3,23 @@ package com.mvwchina.funcation.basicauth.controller;
 import com.google.common.collect.Lists;
 import com.mvwchina.enumeration.DeviceEnum;
 import com.mvwchina.enumeration.LoginTypeEnum;
+import com.mvwchina.enumeration.OSEnum;
+import com.mvwchina.funcation.basicauth.CustomMessageSource;
 import com.mvwchina.funcation.basicauth.PkgConst;
 import com.mvwchina.funcation.basicauth.domain.previous.Human;
 import com.mvwchina.funcation.basicauth.service.HumanService;
 import com.mvwchina.util.MD5;
 import com.mvwchina.util.URLDecoder;
+import com.mvwchina.vo.AnonymousLoginVO;
 import com.mvwchina.vo.LoginVO;
 import com.mvwchina.vo.TokenVO;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
+import net.sf.json.util.CycleDetectionStrategy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +32,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -52,12 +58,87 @@ public class LoginController {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Resource
+    private CustomMessageSource customMessageSource;
+
     @Value("3")
-    private int tokenAlive;
+    private int tokenAlivePC;
+
+    @Value("180")
+    private int tokenAliveMobile;
 
     @GetMapping(produces = "text/html;charset=utf-8")
     public String loginPage() {
         return "login";
+    }
+
+    @ResponseBody
+    @PostMapping(headers = "X-MVW-ENV-ANONYMOUS=true", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public TokenVO anonymousLoginHandle(@RequestBody AnonymousLoginVO anonymousLoginVO,
+                                        @RequestHeader("X-MVW-ENV-DEVICE") DeviceEnum deviceEnum,
+                                        @RequestHeader("X-MVW-ENV-OS") OSEnum osEnumEnum,
+                                        @RequestHeader("X-MVW-ENV-APPID") String appId,
+                                        HttpServletResponse response
+    ) {
+
+        Human human = humanService.findByAccount(anonymousLoginVO.getAccount())
+                .orElseGet(() -> humanService.save(Human.builder()
+                        .deleted(false)
+                        .frozen(false)
+                        .comments("terminalId:" + anonymousLoginVO.getAccount() + "")
+                        .account(anonymousLoginVO.getAccount())
+                        .name("游客")
+                        .build()));
+
+        //180*100天后过期
+        Date expireDate = Date.from(LocalDateTime.now().plusDays(tokenAliveMobile * 100).atZone(ZoneId.systemDefault()).toInstant());
+        String token = MD5.encode(expireDate.toString(), deviceEnum.name());
+
+        int duration = (int) Duration.ofDays(tokenAliveMobile * 100).getSeconds();
+
+        Cookie userIdCookie = new Cookie(PkgConst.X_MVW_USER_ID, human.getCaId());
+        userIdCookie.setMaxAge(duration);
+        response.addCookie(userIdCookie);
+
+        Cookie tokenCookie = new Cookie(PkgConst.ACCESS_KEY, token);
+        tokenCookie.setMaxAge(duration);
+        response.addCookie(tokenCookie);
+
+        Cookie deviceCookie = new Cookie(PkgConst.DEVICE_TYPE, deviceEnum.name());
+        deviceCookie.setMaxAge(duration);
+        response.addCookie(deviceCookie);
+
+        /*兼容老的一体化*/
+        String previousToken = UUID.randomUUID().toString().replace("-", "");
+        Cookie previousTokenCookie = new Cookie(PkgConst.PREVIOUS_TOKEN, previousToken);
+        previousTokenCookie.setMaxAge(duration);
+        response.addCookie(previousTokenCookie);
+
+        JsonConfig jsonConfig = new JsonConfig();
+        jsonConfig.setCycleDetectionStrategy(CycleDetectionStrategy.NOPROP);
+        String hs = JSONObject.fromObject(human, jsonConfig).toString();
+        stringRedisTemplate.opsForHash().put(PkgConst.CA_HUMAN_CAID_HUMAN, human.getCaId(), hs);
+        stringRedisTemplate.opsForHash().put(PkgConst.CA_HUMAN_TOKEN_HUMAN, previousToken, hs);
+
+        stringRedisTemplate.opsForHash().put(PkgConst.CA_HUMAN_TOKEN_CAID, previousToken, human.getCaId());
+        stringRedisTemplate.opsForHash().put(PkgConst.CA_HUMAN_CAID_TOKEN, human.getCaId(), previousToken);
+        /*兼容老的一体化*/
+
+        /* set redis start [token,deviceid,appid,expire] */
+        List tokenResult = Lists.newArrayList(token, deviceEnum, appId, expireDate);
+        redisTemplate.opsForHash().put(human.getCaId(), deviceEnum.name(), tokenResult);
+        /* set redis end */
+
+        return TokenVO.builder()
+                .status(true)
+                .userID(human.getCaId())
+                .token(token)
+                .previousToken(previousToken)
+                .expiresIn(expireDate.getTime())
+                .build();
     }
 
 
@@ -117,8 +198,65 @@ public class LoginController {
      */
     @ResponseBody
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public TokenVO loginHandle(@RequestBody LoginVO loginVO) {
-        return TokenVO.builder().build();
+    public TokenVO loginHandle(@RequestBody LoginVO loginVO,
+                               @RequestHeader("X-MVW-ENV-DEVICE") DeviceEnum deviceEnum,
+                               @RequestHeader("X-MVW-ENV-OS") OSEnum osEnumEnum,
+                               @RequestHeader("X-MVW-ENV-APPID") String appId,
+                               @RequestHeader(value = "X-MVW-ENV-LOGIN_TYPE", defaultValue = "PHONE_AND_PASSWORD") LoginTypeEnum loginTypeEnum,
+                               HttpServletResponse response
+    ) {
+        return humanService.findByAccount(loginVO.getAccount())
+                .filter(human -> humanService.auth(loginVO, human))
+                .map(human -> {
+                    //180*100天后过期
+                    Date expireDate = Date.from(LocalDateTime.now().plusDays(tokenAliveMobile * 100).atZone(ZoneId.systemDefault()).toInstant());
+                    String token = MD5.encode(expireDate.toString(), deviceEnum.name());
+
+                    int duration = (int) Duration.ofDays(tokenAliveMobile * 100).getSeconds();
+
+                    Cookie userIdCookie = new Cookie(PkgConst.X_MVW_USER_ID, human.getCaId());
+                    userIdCookie.setMaxAge(duration);
+                    response.addCookie(userIdCookie);
+
+                    Cookie tokenCookie = new Cookie(PkgConst.ACCESS_KEY, token);
+                    tokenCookie.setMaxAge(duration);
+                    response.addCookie(tokenCookie);
+
+                    Cookie deviceCookie = new Cookie(PkgConst.DEVICE_TYPE, deviceEnum.name());
+                    deviceCookie.setMaxAge(duration);
+                    response.addCookie(deviceCookie);
+
+                    /*兼容老的一体化*/
+                    String previousToken = UUID.randomUUID().toString().replace("-", "");
+                    Cookie previousTokenCookie = new Cookie(PkgConst.PREVIOUS_TOKEN, previousToken);
+                    previousTokenCookie.setMaxAge(duration);
+                    response.addCookie(previousTokenCookie);
+
+                    JsonConfig jsonConfig = new JsonConfig();
+                    jsonConfig.setCycleDetectionStrategy(CycleDetectionStrategy.NOPROP);
+                    String hs = JSONObject.fromObject(human, jsonConfig).toString();
+                    stringRedisTemplate.opsForHash().put(PkgConst.CA_HUMAN_CAID_HUMAN, human.getCaId(), hs);
+                    stringRedisTemplate.opsForHash().put(PkgConst.CA_HUMAN_TOKEN_HUMAN, previousToken, hs);
+
+                    stringRedisTemplate.opsForHash().put(PkgConst.CA_HUMAN_TOKEN_CAID, previousToken, human.getCaId());
+                    stringRedisTemplate.opsForHash().put(PkgConst.CA_HUMAN_CAID_TOKEN, human.getCaId(), previousToken);
+                    /*兼容老的一体化*/
+
+                    /* set redis start [token,deviceid,appid,expire] */
+                    List tokenResult = Lists.newArrayList(token, deviceEnum, appId, expireDate);
+                    redisTemplate.opsForHash().put(human.getCaId(), deviceEnum.name(), tokenResult);
+                    /* set redis end */
+
+                    return TokenVO.builder()
+                            .status(true)
+                            .userID(human.getCaId())
+                            .token(token)
+                            .previousToken(previousToken)
+                            .expiresIn(expireDate.getTime())
+                            .build();
+                })
+                .orElse(TokenVO.builder().status(false).reason(customMessageSource.getMessage("login.fail")).build());
+
     }
 
     @PostMapping(produces = "text/html;charset=utf-8")
@@ -132,54 +270,59 @@ public class LoginController {
             HttpServletResponse response
     ) {
 
-        LoginVO loginVO = new LoginVO();
-        loginVO.setAccount(account);
-        loginVO.setPassword(password);
-        loginVO.setAppId(appId);
-        loginVO.setLoginTypeEnum(loginTypeEnum);
-        loginVO.setDeviceEnum(deviceEnum);
+        LoginVO loginVO = LoginVO.builder()
+                .account(account)
+                .password(password)
+                .build();
 
-        Optional<Human> humanOptional = humanService.findByAccount(account);
+        return humanService.findByAccount(loginVO.getAccount())
+                .filter(human -> humanService.auth(loginVO, human))
+                .map(human -> {
+                    //3天后过期
+                    Date expireDate = Date.from(LocalDateTime.now().plusDays(tokenAlivePC).atZone(ZoneId.systemDefault()).toInstant());
+                    String token = MD5.encode(expireDate.toString(), deviceEnum.name());
 
-        if (!humanOptional.isPresent() || !humanService.auth(loginVO, humanOptional.get())) {
-            return "login";
-        }
+                    int duration = (int) Duration.ofDays(tokenAlivePC).getSeconds();
 
-        //3天后过期
-        Date expireDate = Date.from(LocalDateTime.now().plusDays(tokenAlive).atZone(ZoneId.systemDefault()).toInstant());
-        String token = MD5.encode(expireDate.toString(), loginVO.getDeviceEnum().name());
+                    /* set Cookie start */
+                    Cookie userIdCookie = new Cookie(PkgConst.X_MVW_USER_ID, human.getCaId());
+                    userIdCookie.setMaxAge(duration);
+                    response.addCookie(userIdCookie);
 
-        int duration = (int) Duration.ofDays(tokenAlive).getSeconds();
+                    Cookie tokenCookie = new Cookie(PkgConst.ACCESS_KEY, token);
+                    tokenCookie.setMaxAge(duration);
+                    response.addCookie(tokenCookie);
 
-        /* set Cookie start */
-        Cookie userIdCookie = new Cookie(PkgConst.X_MVW_USER_ID, humanOptional.get().getCaId());
-        userIdCookie.setMaxAge(duration);
-        response.addCookie(userIdCookie);
+                    Cookie deviceCookie = new Cookie(PkgConst.DEVICE_TYPE, deviceEnum.name());
+                    deviceCookie.setMaxAge(duration);
+                    response.addCookie(deviceCookie);
+                    /* set Cookie end */
 
-        Cookie tokenCookie = new Cookie(PkgConst.ACCESS_KEY, token);
-        tokenCookie.setMaxAge(duration);
-        response.addCookie(tokenCookie);
+                    /*兼容老的一体化*/
+                    String previousToken = UUID.randomUUID().toString().replace("-", "");
+                    Cookie previousTokenCookie = new Cookie(PkgConst.PREVIOUS_TOKEN, previousToken);
+                    previousTokenCookie.setMaxAge(duration);
+                    response.addCookie(previousTokenCookie);
 
-        Cookie deviceCookie = new Cookie(PkgConst.DEVICE_TYPE, deviceEnum.name());
-        deviceCookie.setMaxAge(duration);
-        response.addCookie(deviceCookie);
-        /* set Cookie end */
+                    JsonConfig jsonConfig = new JsonConfig();
+                    jsonConfig.setCycleDetectionStrategy(CycleDetectionStrategy.NOPROP);
+                    String hs = JSONObject.fromObject(human, jsonConfig).toString();
+                    stringRedisTemplate.opsForHash().put(PkgConst.CA_HUMAN_CAID_HUMAN, human.getCaId(), hs);
+                    stringRedisTemplate.opsForHash().put(PkgConst.CA_HUMAN_TOKEN_HUMAN, previousToken, hs);
 
-        /*兼容老的一体化*/
-        String previousToken = UUID.randomUUID().toString().replace("-", "");
-        Cookie previousTokenCookie = new Cookie(PkgConst.PREVIOUS_TOKEN, previousToken);
-        previousTokenCookie.setMaxAge(duration);
-        response.addCookie(previousTokenCookie);
-        redisTemplate.opsForHash().put(PkgConst.CA_HUMAN_TOKEN_HUMAN, previousToken, humanOptional.get());
-        redisTemplate.opsForHash().put(PkgConst.CA_HUMAN_CAID_TOKEN, humanOptional.get().getCaId(), previousToken);
-        /*兼容老的一体化*/
+                    stringRedisTemplate.opsForHash().put(PkgConst.CA_HUMAN_TOKEN_CAID, previousToken, human.getCaId());
+                    stringRedisTemplate.opsForHash().put(PkgConst.CA_HUMAN_CAID_TOKEN, human.getCaId(), previousToken);
+                    /*兼容老的一体化*/
 
-        /* set redis start [token,deviceid,appid,expire] */
-        List tokenResult = Lists.newArrayList(token, loginVO.getDeviceEnum(), loginVO.getAppId(), expireDate);
-        redisTemplate.opsForHash().put(humanOptional.get().getCaId(), loginVO.getDeviceEnum().name(), tokenResult);
-        /* set redis end */
+                    /* set redis start [token,deviceid,appid,expire] */
+                    List tokenResult = Lists.newArrayList(token, deviceEnum, appId, expireDate);
+                    redisTemplate.opsForHash().put(human.getCaId(), deviceEnum.name(), tokenResult);
+                    /* set redis end */
 
-        return "redirect:" + URLDecoder.decode(redirectUri, "home");
+                    return "redirect:" + URLDecoder.decode(redirectUri, "home");
+                })
+                .orElse("login");
+
     }
 
 

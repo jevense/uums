@@ -41,5 +41,9 @@ public class HumanService {
         return password.equals(human.getPwd());
     }
 
+    public Human save(Human human) {
+        return humanRepository.save(human);
+    }
+
 
 }

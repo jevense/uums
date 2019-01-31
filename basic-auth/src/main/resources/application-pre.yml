@@ -2,9 +2,9 @@ server:
   port: 8401
 spring:
   datasource:
-    url: jdbc:mysql://rm-2ze4mz4fu2pe03i4hrw.mysql.rds.aliyuncs.com:3306/cadb2?useUnicode=true&characterEncoding=utf8
-    username: cadb2_user
-    password: woAQyCSi$0QZbF67
+    url: jdbc:mysql://127.0.0.1:3306/cadb_v50?useUnicode=true&characterEncoding=utf8
+    username: root
+    password:
     driver-class-name: org.mariadb.jdbc.Driver
     hikari:
       minimum-idle: 5
@@ -27,11 +27,7 @@ spring:
       enabled: true
       exclude: static/**,public/**
   redis:
-    host: r-2zefa348defe9984.redis.rds.aliyuncs.com
+    host: 127.0.0.1
     port: 6379
-    password: TjG4r26Jlg3S
-    timeout: 2000ms
-    jedis:
-      pool:
-        max-idle: 1500
+    password:
 #    database: 0

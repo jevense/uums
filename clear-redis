@@ -1,3 +1,5 @@
-redis-cli -n 0 keys "**"|xargs redis-cli -n 0 del
+redis-cli  -n 0 keys "**"|xargs redis-cli -n 0 del
+
+redis-cli -p 7369 -a 123456  -n 0 keys "**" | xargs redis-cli -p 7369 -a 123456 -n 0  del
 
 redis-cli -h 127.0.0.1

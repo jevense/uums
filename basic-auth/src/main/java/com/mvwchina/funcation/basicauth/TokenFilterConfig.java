@@ -53,11 +53,17 @@ public class TokenFilterConfig implements Filter {
             return;
         }
 
+//        if (servletRequest.getCookies() != null) {
+//            for (Cookie cookie : servletRequest.getCookies()) {
+//                log.debug(cookie.getName() + "->" + cookie.getValue() + "->" + cookie.getDomain());
+//            }
+//        }
+
         Map<String, String> authInfo = Arrays
                 .stream(Optional
                         .ofNullable(servletRequest.getCookies())
                         .orElse(new Cookie[]{}))
-                .collect(Collectors.toMap(Cookie::getName, Cookie::getValue));
+                .collect(Collectors.toMap(Cookie::getName, Cookie::getValue, (val1, val2) -> val2));
 
         String userID = Optional
                 .ofNullable(authInfo.get(PkgConst.X_MVW_USER_ID))
@@ -81,7 +87,7 @@ public class TokenFilterConfig implements Filter {
                 .map(list -> (long) list.get(3) > new Date().getTime())
                 .orElse(false);
 
-        if (servletRequest.getServletPath().matches("/validate")) {
+        if (servletRequest.getServletPath().startsWith("/validate")) {
             servletRequest.setAttribute(PkgConst.X_MVW_VALIDATE, status);
             chain.doFilter(request, response);
             return;
